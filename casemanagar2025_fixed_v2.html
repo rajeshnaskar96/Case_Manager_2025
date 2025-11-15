@@ -1,0 +1,3817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Case Manager 2025</title>
+<!-- External CSS Libraries -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet"/>
+<style>
+.content {
+  margin-left: 250px;
+}
+
+    /* --- CUSTOM DESIGN SYSTEM --- */
+    :root {
+      --primary-color: #4f46e5;
+      --primary-hover: #4338ca;
+      --sidebar-bg: #111827;
+      --sidebar-link: #9ca3af;
+      --sidebar-link-active: #ffffff;
+      --sidebar-link-active-bg: #374151;
+      --content-bg: #f3f4f6;
+      --text-primary: #1f2937;
+      --text-secondary: #6b7280;
+      --border-color: #e5e7eb;
+      --card-bg: #ffffff;
+    }
+
+    body {
+      font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+      background-color: var(--content-bg);
+      color: var(--text-primary);
+    }
+
+    /* --- SIDEBAR --- */
+    .sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-right: 0.5rem;
+  background: var(--sidebar-bg);
+  border-right: none;
+  transition: transform 0.3s ease-in-out;
+  z-index: 1000;
+}
+    .sidebar .sidebar-header {
+      color: #fff;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+    .sidebar .nav-link {
+      color: var(--sidebar-link);
+      font-size: 0.95rem;
+      padding: 0.75rem 1.25rem;
+      border-radius: 6px;
+      margin-bottom: 0.25rem;
+      font-weight: 500;
+      transition: color 0.2s, background-color 0.2s;
+    }
+    .sidebar .nav-link:hover {
+      background: var(--sidebar-link-active-bg);
+      color: var(--sidebar-link-active);
+    }
+    .sidebar .nav-link.active {
+      background: var(--primary-color);
+      color: var(--sidebar-link-active);
+    }
+    .sidebar .nav-link i.fa-fw {
+      width: 20px;
+      text-align: center;
+    }
+
+    /* Sidebar Filters */
+    .sidebar .filters { padding: 1.25rem; }
+    .sidebar .filters .h6 { color: #6b7280; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; }
+    .sidebar .filters .form-label { color: var(--sidebar-link); font-size: 0.85rem; }
+    .sidebar .filters .form-select { background-color: #374151; color: #fff; border-color: #4b5563; }
+    .sidebar .filters .form-select:focus { box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.4); }
+
+    /* --- MAIN CONTENT --- */
+    .main-content { padding: 2rem !important; }
+    .main-title { font-weight: 700; color: var(--text-primary); }
+
+    /* --- CARDS --- */
+    .card { 
+      background-color: var(--card-bg); 
+      border: none; 
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1); 
+      border-radius: 0.75rem; 
+    }
+    .card-header { 
+      background-color: transparent; 
+      border-bottom: 1px solid var(--border-color); 
+      font-weight: 600; 
+      padding: 1rem 1.25rem; 
+    }
+
+    /* Stat Cards */
+    .card-stats .card-body { display: flex; justify-content: space-between; align-items: center; }
+    .card-stats .stat-icon { display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; }
+    .card-stats .stat { font-size: 2rem; font-weight: 700; line-height: 1; color: var(--text-primary); }
+    .card-stats .stat-label { color: var(--text-secondary); font-size: 0.9rem; }
+    .icon-primary { background-color: #e0e7ff; color: #4338ca; }
+    .icon-success { background-color: #d1fae5; color: #059669; }
+    .icon-warning { background-color: #fef3c7; color: #d97706; }
+    .icon-info { background-color: #dbeafe; color: #2563eb; }
+
+    /* --- TABLES --- */
+    .table { border-color: var(--border-color); }
+    .table thead { background-color: #f9fafb; }
+    .table th { font-weight: 600; color: var(--text-secondary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.75rem 1rem; border-bottom-width: 1px; }
+    .table td { vertical-align: middle; padding: 0.85rem 1rem; font-size: 0.95rem; }
+    .table-hover > tbody > tr:hover { --bs-table-accent-bg: #f1f5f9; }
+
+    /* --- FORMS & BUTTONS --- */
+    .form-label { font-weight: 500; margin-bottom: 0.5rem; }
+    .form-control, .form-select { border-radius: 0.5rem; border-color: #d1d5db; padding: 0.5rem 0.85rem; }
+    .form-control:focus, .form-select:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+    .btn { border-radius: 0.5rem; font-weight: 600; padding: 0.5rem 1rem; transition: all 0.2s ease; }
+    .btn-sm { padding: 0.35rem 0.7rem; font-size: 0.875rem; }
+    .btn-primary { background-color: var(--primary-color); border-color: var(--primary-color); }
+    .btn-primary:hover { background-color: var(--primary-hover); border-color: var(--primary-hover); }
+
+    /* Image Previews */
+    .image-preview, .signature-preview { width: 100%; height: 120px; border: 2px dashed var(--border-color); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #fff; transition: border-color 0.2s; }
+    .image-preview:hover, .signature-preview:hover { border-color: var(--primary-color); }
+    .image-preview img, .signature-preview img { max-width: 100%; max-height: 100%; object-fit: contain; }
+    
+    /* --- MODAL STYLES --- */
+    .modal-details-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 0.5rem 1rem; }
+    .modal-details-grid dt { font-weight: 600; color: var(--text-secondary); }
+    .modal-details-grid dd { margin-bottom: 0.5rem; }
+    .modal-image-container { border: 1px solid var(--border-color); border-radius: 0.5rem; padding: 0.5rem; height: 150px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #fff; }
+    .modal-image-container img { max-height: 100%; max-width: 100%; object-fit: contain; }
+    #dayEventsModal .list-group-item { cursor: pointer; }
+    #dayEventsModal .list-group-item:hover { background-color: #f3f4f6; }
+
+    /* Preview Modal Styles */
+    .preview-modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .preview-item { margin-bottom: 0.75rem; }
+    .preview-label { font-weight: 600; color: var(--text-secondary); margin-bottom: 0.25rem; }
+    .preview-value { word-break: break-word; }
+
+    /* --- CALENDAR CUSTOMIZATION --- */
+    .fc .fc-button-primary { background-color: var(--primary-color) !important; border-color: var(--primary-color) !important; }
+    .fc .fc-daygrid-day.fc-day-today { background-color: rgba(79, 70, 229, 0.05); }
+    .fc-daygrid-event-count { background-color: var(--primary-color); color: white; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.8em; margin: 2px auto; }
+    .fc-daygrid-day-frame { position: relative; }
+
+    /* Task styles */
+    .task-row { border-left: 4px solid transparent; transition: all 0.2s; }
+    .task-row:hover { background-color: #f8f9fa; border-left-color: var(--primary-color); }
+    .task-completed { text-decoration: line-through; opacity: 0.7; }
+    .task-priority-high { border-left-color: #dc3545 !important; }
+    .task-priority-medium { border-left-color: #fd7e14 !important; }
+    .task-priority-low { border-left-color: #20c997 !important; }
+
+    /* QR Code styles */
+    .qr-code-container {
+      display: flex;
+      justify-content: center;
+      margin: 15px 0;
+      padding: 10px;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      background: white;
+    }
+    
+    /* Task Modal Styles */
+    .task-modal-content {
+      padding: 20px;
+    }
+    .task-detail-item {
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #eee;
+    }
+    .task-detail-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    .task-detail-label {
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 5px;
+    }
+    .task-detail-value {
+      font-size: 1.1rem;
+    }
+
+    /* Small QR code for inline display */
+    .qr-small {
+      width: 128px;
+      height: 128px;
+      border-radius: 8px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #eee;
+      margin-top: 8px;
+    }
+    
+    .small-muted {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    
+    .btn-outline-custom {
+      border-radius: 8px;
+    }
+
+    /* Calendar day with events badge */
+    .fc-daygrid-day-top {
+      position: relative;
+    }
+    .day-event-badge {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8em;
+      font-weight: bold;
+      z-index: 5;
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 991px) {
+      .sidebar { position: fixed; z-index: 1030; left: 0; top: 0; width: 280px; transform: translateX(-100%); }
+      .sidebar.show { transform: translateX(0); box-shadow: 0 0 2rem rgba(0,0,0,0.1); }
+      .main-content { margin-left: 0; padding: 1.5rem !important; }
+    }
+    
+    /* Chart Styles */
+    .chart-container {
+        height: 280px;
+        width: 100%;
+        margin: auto;
+    }
+
+    /* Print styles for upcoming cases */
+    @media print {
+      body * {
+        visibility: hidden !important;
+      }
+      .printable, .printable * {
+        visibility: visible !important;
+      }
+      .printable {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        padding: 15px;
+      }
+      .printable table, .printable th, .printable td {
+          visibility: visible !important;
+      }
+      .modal { display: none !important; }
+    }
+
+    /* Case Detail Modal Scroll */
+    .case-detail-modal-body {
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+
+    /* Chart improvements */
+    .chart-card {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      margin-bottom: 1.5rem;
+    }
+    .chart-card .card-header {
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    }
+
+    /* Case Print Layout */
+    .case-print-layout {
+      width: 210mm;
+      min-height: 297mm;
+      padding: 15mm;
+      margin: 0 auto;
+      background: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .case-print-header {
+      text-align: center;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #4f46e5;
+      padding-bottom: 15px;
+    }
+    .case-print-section {
+      margin-bottom: 20px;
+      page-break-inside: avoid;
+    }
+    .case-print-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    .case-print-field {
+      margin-bottom: 10px;
+    }
+    .case-print-label {
+      font-weight: 600;
+      color: #4b5563;
+      margin-bottom: 5px;
+    }
+    .case-print-value {
+      padding: 8px;
+      background: #f9fafb;
+      border-radius: 4px;
+      border-left: 3px solid #4f46e5;
+    }
+    .case-print-full-width {
+      grid-column: 1 / -1;
+    }
+    .case-print-images {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+    .case-print-image-container {
+      width: 48%;
+      text-align: center;
+    }
+    .case-print-image {
+      max-width: 100%;
+      max-height: 150px;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      padding: 5px;
+      background: white;
+    }
+  
+#backupSection .card { margin: 0 auto; max-width: 1100px; }
+#backupSection .container { margin: 0 auto; max-width: 1100px; }
+</style>
+<style>
+/* --- Record of Transaction redesign overrides --- */
+#record-transaction, /* in case wrapper exists */ .record-transaction, .transactions-page {
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* Page header */
+.page-header, .page-title, h1, h2.section-title {
+  font-size: 32px !important;
+  font-weight: 700 !important;
+  color: #102a43 !important;
+  margin: 0 0 18px !important;
+}
+
+/* Top controls (buttons) */
+.page-controls, .quick-actions, .actions-top {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+
+/* Totals cards row */
+.totals-row, .summary-cards, .stats-row {
+  display: flex;
+  gap: 18px;
+  align-items: stretch;
+  margin-bottom: 16px;
+}
+.totals-row .card, .summary-cards .card, .stats-row .card {
+  flex: 1 1 0;
+  border-radius: 10px;
+  padding: 18px;
+  box-shadow: 0 6px 18px rgba(16, 42, 67, 0.06);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+}
+.totals-row .card .amount { font-size: 26px; font-weight:700; color:#117a65; }
+.totals-row .card .label { font-size:12px; color:#6b7280; }
+
+.totals-row .card.deposit .amount { color:#0b8457; }
+.totals-row .card.expense .amount { color:#c6292a; }
+.totals-row .card.balance .amount { color:#0b8457; }
+
+/* Main two-column panels */
+.panels-row { display:flex; gap:18px; align-items:flex-start; }
+.panel { flex:1; background:#fff; border-radius:10px; padding:0; box-shadow:0 8px 24px rgba(16,42,67,0.06); overflow:hidden; }
+.panel .panel-header { padding:14px 18px; border-bottom:1px solid #f1f5f9; font-weight:700; color:#134e4a; }
+.panel .panel-body { padding:14px 18px; }
+
+.table-light thead th { background: transparent; color:#6b7280; font-weight:600; border-bottom:1px solid #eef2f6; }
+.table-light tbody td { border-top: none; padding:18px 12px; vertical-align: middle; }
+
+.actions .btn { border-radius:8px; padding:8px 12px; font-size:14px; }
+
+/* Responsive tweak */
+@media (max-width: 900px){
+  .panels-row { flex-direction: column; }
+  .totals-row { flex-direction: column; }
+}
+</style></head>
+<body>
+<div class="container-fluid">
+<div class="row g-0">
+<aside class="col-lg-2 sidebar p-3" id="sidebar">
+<div class="d-flex align-items-center mb-4 p-2 sidebar-header">
+<i class="fas fa-gavel me-2"></i>
+<span>Case Management</span>
+</div>
+<nav class="nav flex-column mb-3">
+<a class="nav-link active" data-target="dashboard" href="#"><i class="fas fa-fw fa-tachometer-alt me-2"></i> Dashboard</a>
+<a class="nav-link" data-target="cases" href="#"><i class="fas fa-fw fa-folder-open me-2"></i> All Cases</a>
+<a class="nav-link" data-target="add" href="#"><i class="fas fa-fw fa-user-plus me-2"></i> Add Client / Case</a>
+<a class="nav-link" data-target="calendar" href="#"><i class="fas fa-fw fa-calendar-alt me-2"></i> Calendar</a>
+<a class="nav-link" data-target="reports" href="#"><i class="fas fa-fw fa-chart-pie me-2"></i> Reports</a>
+<a class="nav-link" data-target="tasks" href="#"><i class="fas fa-fw fa-tasks me-2"></i> Tasks</a>
+<a class="nav-link" data-target="upcoming" href="#"><i class="fas fa-fw fa-clock me-2"></i> Upcoming Case</a>
+<a class="nav-link" data-target="reminders" href="#"><i class="fas fa-fw fa-bell me-2"></i> Reminders</a>
+<a class="nav-link" data-target="whatwork" href="#"><i class="fas fa-fw fa-clipboard-list me-2"></i> What work today</a>
+<a class="nav-link" data-target="whatwork" href="#"><i class="fas fa-fw fa-clipboard-list me-2"></i> Calculator</a>
+<a class="nav-link" data-target="transactions" href="#">Daily Transaction</a>
+<a class="nav-link" data-target="backup" href="#"><i class="fas fa-fw fa-database me-2"></i> Backup</a>
+</nav>
+<hr class="text-secondary"/>
+<div class="filters">
+<h6 class="h6 small text-muted mb-3">Filters</h6>
+<div class="mb-3">
+<label class="form-label small mb-1">Court</label>
+<select class="form-select form-select-sm" id="filterCourt"><option value="">All Courts</option></select>
+</div>
+<div class="mb-3">
+<label class="form-label small mb-1">Year</label>
+<select class="form-select form-select-sm" id="filterYear"><option value="">All Years</option></select>
+</div>
+<div>
+<label class="form-label small mb-1">Status</label>
+<select class="form-select form-select-sm" id="filterStatus">
+<option value="">All Status</option>
+<option>Active</option><option>Pending</option><option>Closed</option><option>No Steps</option>
+</select>
+</div>
+</div>
+</aside>
+<main class="col-lg-10 ms-sm-auto main-content">
+<div class="d-flex align-items-center mb-4">
+<button class="btn btn-outline-secondary d-lg-none me-3" id="toggleSidebar"><i class="fas fa-bars"></i></button>
+<h2 class="me-auto mb-0 main-title">Dashboard</h2>
+<div class="d-flex align-items-center gap-2">
+<div class="input-group" style="max-width:350px;">
+<input aria-label="Search" class="form-control" id="searchInput" placeholder="Search cases..." type="search"/>
+<button class="btn btn-outline-secondary" id="btnSearch"><i class="fas fa-search"></i></button>
+</div>
+<button class="btn btn-outline-secondary" id="btnRefresh" title="Refresh Data"><i class="fas fa-sync-alt"></i></button>
+</div>
+</div>
+<section class="section active" id="dashboardSection">
+<div class="row g-4 mb-4">
+<div class="col-md-6 col-xl-3">
+<div class="card card-stats">
+<div class="card-body">
+<div>
+<div class="stat" id="cardTotal">0</div>
+<div class="stat-label">Total Cases</div>
+</div>
+<div class="stat-icon icon-primary"><i class="fas fa-folder fa-lg"></i></div>
+</div>
+</div>
+</div>
+<div class="col-md-6 col-xl-3">
+<div class="card card-stats">
+<div class="card-body">
+<div>
+<div class="stat" id="cardActive">0</div>
+<div class="stat-label">Active Cases</div>
+</div>
+<div class="stat-icon icon-success"><i class="fas fa-clock fa-lg"></i></div>
+</div>
+</div>
+</div>
+<div class="col-md-6 col-xl-3">
+<div class="card card-stats">
+<div class="card-body">
+<div>
+<div class="stat" id="cardUpcoming">0</div>
+<div class="stat-label">Upcoming Hearings</div>
+</div>
+<div class="stat-icon icon-warning"><i class="fas fa-calendar-day fa-lg"></i></div>
+</div>
+</div>
+</div>
+<div class="col-md-6 col-xl-3">
+<div class="card card-stats">
+<div class="card-body">
+<div>
+<div class="stat" id="cardCourts">0</div>
+<div class="stat-label">Different Courts</div>
+</div>
+<div class="stat-icon icon-info"><i class="fas fa-balance-scale fa-lg"></i></div>
+</div>
+</div>
+</div>
+<div class="col-md-6 col-xl-3">
+<div class="card card-stats">
+<div class="card-body">
+<div>
+<div class="stat" id="cardTasks">0</div>
+<div class="stat-label">Total Tasks</div>
+</div>
+<div class="stat-icon icon-primary"><i class="fas fa-tasks fa-lg"></i></div>
+</div>
+</div>
+</div>
+<div class="col-md-6 col-xl-3">
+<div class="card card-stats">
+<div class="card-body">
+<div>
+<div class="stat" id="cardReminders">0</div>
+<div class="stat-label">Total Reminders</div>
+</div>
+<div class="stat-icon icon-warning"><i class="fas fa-bell fa-lg"></i></div>
+</div>
+</div>
+</div>
+</div>
+<div class="row g-4">
+<div class="col-lg-6">
+<div class="card h-100">
+<div class="card-header d-flex align-items-center">
+<strong>Cases by Case Type</strong>
+<div class="ms-auto">
+<button class="btn btn-sm btn-outline-secondary" id="exportCSV"><i class="fas fa-file-csv me-1"></i> Export CSV</button>
+</div>
+</div>
+<div class="card-body d-flex align-items-center">
+<canvas height="200" id="caseTypeDashboardChart"></canvas>
+</div>
+</div>
+</div>
+<div class="col-lg-6">
+<div class="card h-100">
+<div class="card-header"><strong>Events Calendar</strong></div>
+<div class="card-body">
+<div id="dashboardCalendar"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="card mt-4">
+<div class="card-header d-flex align-items-center">
+<strong>Tasks</strong>
+<div class="ms-auto">
+<button class="btn btn-sm btn-primary" data-bs-target="#taskModal" data-bs-toggle="modal"><i class="fas fa-plus me-1"></i> Add Task</button>
+</div>
+</div>
+<div class="card-body p-0">
+<div class="table-responsive">
+<table class="table table-hover mb-0">
+<thead>
+<tr>
+<th style="width:5%;">Sl.</th>
+<th style="width:15%;">Date</th>
+<th style="width:60%;">Note</th>
+<th style="width:10%;">Priority</th>
+<th style="width:10%;">Actions</th>
+</tr>
+</thead>
+<tbody id="tasksBody"></tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section class="section" id="casesSection" style="display:none;">
+<div class="card">
+<div class="card-header d-flex align-items-center">
+<h4 class="mb-0 me-auto">All Cases</h4>
+<div class="d-flex gap-2">
+<button class="btn btn-sm btn-outline-danger" id="exportCasesPDF"><i class="fas fa-file-pdf me-1"></i> Save as PDF</button>
+<button class="btn btn-sm btn-outline-success" onclick="exportDataToXLSX()"><i class="fas fa-file-excel me-1"></i> Export XLSX</button>
+<input accept=".xlsx,.xls" id="importXLSXInputCase" style="display:none;" type="file">
+<button class="btn btn-sm btn-outline-primary" onclick="document.getElementById('importXLSXInputCase').click();"><i class="fas fa-file-import me-1"></i> Import XLSX</button>
+</input></div>
+</div>
+<div class="card-body">
+<div class="table-responsive">
+<table class="table table-hover mb-0" id="casesTable">
+<thead>
+<tr>
+<th style="width:10%">Case Type</th>
+<th style="width:10%">Case No</th>
+<th style="width:5%">Year</th>
+<th style="width:12%">Court</th>
+<th style="width:18%">Parties</th>
+<th style="width:10%">Next Hearing</th>
+<th style="width:10%">Contact</th>
+<th style="width:12%">Address</th>
+<th style="width:5%">Actions</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+</div>
+</div>
+<div class="card-footer bg-white d-flex justify-content-between align-items-center">
+<div>
+<small class="text-muted" id="casesCount">0 cases</small>
+</div>
+<nav>
+<ul class="pagination pagination-sm mb-0" id="pagination"></ul>
+</nav>
+</div>
+</div>
+</section>
+<section class="section" id="addSection" style="display:none;">
+<div class="d-flex align-items-center mb-3">
+<h4 class="mb-0 me-auto main-title">Add Client / Case</h4>
+</div>
+<div class="card mb-4">
+<div class="card-body">
+<form autocomplete="off" id="caseForm">
+<input id="caseId" type="hidden"/>
+<div class="row g-3">
+<div class="col-md-3">
+<div class="mb-3">
+<label class="form-label">Client Photo</label>
+<input accept=".jpg,.jpeg,.png" class="form-control form-control-sm" id="photo" type="file"/>
+<div class="image-preview mt-2" id="photoPreview"><small class="text-muted">Preview</small></div>
+<small class="small-muted">JPG/PNG, max 300KB</small>
+</div>
+<div class="mb-3">
+<label class="form-label">Client Signature</label>
+<input accept=".jpg,.jpeg,.png" class="form-control form-control-sm" id="signature" type="file"/>
+<div class="signature-preview mt-2" id="signaturePreview"><small class="text-muted">Preview</small></div>
+<small class="small-muted">JPG/PNG, max 200KB</small>
+</div>
+<div class="mt-3">
+<label class="form-label">QR Code</label>
+<div class="qr-small mt-2" id="inlineQr"></div>
+<small class="small-muted d-block mt-1">Auto-generated for the case</small>
+</div>
+</div>
+<div class="col-md-9">
+<div class="row g-2">
+<div class="col-md-5">
+<label class="form-label">Select Court / Authority <span class="text-danger">*</span></label>
+<div class="d-flex gap-2">
+<select class="form-select" id="court" required="">
+<option value="">-- Select Court --</option>
+</select>
+<button class="btn btn-outline-secondary btn-outline-custom" id="addCourtBtn" title="Add new court/authority" type="button">+</button>
+<button class="btn btn-outline-danger btn-outline-custom" id="removeCourtBtn" title="Remove selected court" type="button">-</button>
+</div>
+</div>
+<div class="col-md-4">
+<label class="form-label">Case Type</label>
+<div class="d-flex gap-2">
+<select aria-label="Case Type" class="form-select" id="caseType">
+<option value="">-- Select Case Type --</option>
+</select>
+<button class="btn btn-outline-secondary btn-outline-custom" id="addCaseTypeBtn" title="Add new case type" type="button">+</button>
+<button class="btn btn-outline-danger btn-outline-custom" id="removeCaseTypeBtn" title="Remove selected case type" type="button">-</button>
+</div>
+</div>
+<div class="col-md-3">
+<label class="form-label">Case No <span class="text-danger">*</span></label>
+<input class="form-control" id="caseNo" required=""/>
+</div>
+<div class="col-md-2">
+<label class="form-label">Year <span class="text-danger">*</span></label>
+<input class="form-control" id="year" max="2100" min="1900" required="" type="number"/>
+</div>
+<div class="col-md-5">
+<label class="form-label"> Parties (Versus)</label>
+<input class="form-control" id="parties"/>
+</div>
+<div class="col-md-3">
+<label class="form-label">My Client</label>
+<select class="form-select" id="clientType">
+<option value="">-- Select --</option>
+<option>Plaintiff</option>
+<option>Defendant</option>
+<option>Appellant</option>
+<option>Respondent</option>
+<option>Opp. Party</option>
+<option>Applicant</option>
+</select>
+</div>
+<div class="col-md-2">
+<label class="form-label">Contact No.</label>
+<input class="form-control" id="contact"/>
+</div>
+<div class="col-md-2">
+<label class="form-label">Have Injunction</label>
+<select class="form-select" id="injunction">
+<option value="No">No</option>
+<option value="Yes">Yes</option>
+</select>
+</div>
+<div class="col-md-2">
+<label class="form-label">Priority</label>
+<select class="form-select" id="priority">
+<option>Low</option><option selected="">Medium</option><option>High</option>
+</select>
+</div>
+<div class="col-md-4">
+<label class="form-label">CNR No.</label>
+<input class="form-control" id="cnr"/>
+</div>
+<div class="col-md-4">
+<label class="form-label">Filing Date</label>
+<input class="form-control" id="filingDate" type="date"/>
+</div>
+<div class="col-md-4">
+<label class="form-label">Next Hearing</label>
+<input class="form-control" id="nextHearing" type="date"/>
+</div>
+<div class="col-md-4">
+<label class="form-label">Status</label>
+<select class="form-select" id="status">
+<option>Active</option><option>Pending</option><option>Closed</option><option>No Steps</option>
+</select>
+</div>
+<div class="col-12">
+<label class="form-label">Address</label>
+<input class="form-control" id="address"/>
+</div>
+<div class="col-12">
+<label class="form-label">Total Money Record History</label>
+<input class="form-control" id="moneyHistory"/>
+</div>
+<div class="col-12">
+<label class="form-label">In connection with case or link case</label>
+<select class="form-select" id="linkedCase">
+<option value="">-- Select Linked Case --</option>
+</select>
+</div>
+<div class="col-12">
+<label class="form-label">Special Judgement of this Case</label>
+<textarea class="form-control" id="specialJudgement" rows="3"></textarea>
+</div>
+<div class="col-12">
+<label class="form-label">Gist / Note</label>
+<textarea class="form-control" id="details" rows="3"></textarea>
+</div>
+<div class="col-12 d-flex justify-content-end gap-2 mt-2">
+<button class="btn btn-outline-info" id="previewBtn" type="button">Preview</button>
+<button class="btn btn-outline-secondary" id="clearBtn" type="button">Clear</button>
+<button class="btn btn-primary" id="saveBtn" type="submit">Add Case</button>
+</div>
+</div> </div> </div> </form>
+</div>
+</div>
+</section>
+<section class="section" id="calendarSection" style="display:none;">
+<div class="card">
+<div class="card-header d-flex align-items-center">
+<strong>Calendar</strong>
+<div class="ms-auto">
+<button class="btn btn-sm btn-outline-secondary" id="btnRefreshCalendar">Refresh</button>
+</div>
+</div>
+<div class="card-body">
+<div id="bigCalendar"></div>
+</div>
+</div>
+</section>
+<section class="section" id="reportsSection" style="display:none;">
+<div class="row g-4">
+<div class="col-lg-6">
+<div class="card chart-card">
+<div class="card-header"><strong>Cases by Status</strong></div>
+<div class="card-body">
+<div class="chart-container"><canvas height="180" id="statusChart"></canvas></div>
+</div>
+</div>
+</div>
+<div class="col-lg-6">
+<div class="card chart-card">
+<div class="card-header"><strong>Cases by Year</strong></div>
+<div class="card-body">
+<div class="chart-container"><canvas height="180" id="yearChart"></canvas></div>
+</div>
+</div>
+</div>
+<div class="col-lg-6">
+<div class="card chart-card">
+<div class="card-header"><strong>Cases by Court</strong></div>
+<div class="card-body">
+<div class="chart-container"><canvas height="180" id="courtChart"></canvas></div>
+</div>
+</div>
+</div>
+<div class="col-lg-6">
+<div class="card chart-card">
+<div class="card-header"><strong>Cases by Case Type</strong></div>
+<div class="card-body">
+<div class="chart-container"><canvas height="180" id="caseTypeReportChart"></canvas></div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-3 d-flex gap-2">
+<button class="btn btn-sm btn-outline-secondary" id="exportCsvBtn"><i class="fas fa-file-csv"></i> Export CSV</button>
+<button class="btn btn-sm btn-outline-secondary" id="printReportBtn"><i class="fas fa-print"></i> Print</button>
+</div>
+</section>
+<section class="section" id="tasksSection" style="display:none;">
+<div class="card">
+<div class="card-header d-flex align-items-center">
+<strong>Tasks</strong>
+<div class="ms-auto">
+<button class="btn btn-sm btn-primary" data-bs-target="#taskModal" data-bs-toggle="modal"><i class="fas fa-plus me-1"></i> Add Task</button>
+</div>
+</div>
+<div class="card-body p-0">
+<div class="table-responsive">
+<table class="table table-hover mb-0">
+<thead>
+<tr>
+<th style="width:5%;">Sl.</th>
+<th style="width:15%;">Date</th>
+<th style="width:60%;">Note</th>
+<th style="width:10%;">Priority</th>
+<th style="width:10%;">Actions</th>
+</tr>
+</thead>
+<tbody id="tasksTableBody"></tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section class="section" id="upcomingSection" style="display:none;">
+<div class="card">
+<div class="card-header d-flex align-items-center">
+<h4 class="mb-0 me-auto">Upcoming Cases</h4>
+<div class="d-flex align-items-center gap-2">
+<select class="form-select form-select-sm" id="upcomingRange" style="width:150px;">
+<option value="7">Next 1 Week</option>
+<option value="14">Next 2 Weeks</option>
+<option selected="" value="30">Next 1 Month</option>
+<option value="90">Next 3 Months</option>
+</select>
+<button class="btn btn-sm btn-outline-secondary" id="btnPrintUpcoming"><i class="fas fa-print me-1"></i> Print</button>
+<button class="btn btn-sm btn-outline-danger" id="exportUpcomingPDF"><i class="fas fa-file-pdf me-1"></i> Save as PDF</button>
+</div>
+</div>
+<div class="card-body p-0">
+<div class="table-responsive printable">
+<table class="table table-hover mb-0">
+<thead>
+<tr>
+<th style="width:12%;">Case No.</th>
+<th style="width:8%;">Year</th>
+<th style="width:16%;">Court Name</th>
+<th>Parties</th>
+<th style="width:12%;">Date</th>
+<th style="width:12%;">Contact No</th>
+<th style="width:10%;">Injunction</th>
+<th style="width:5%;">Actions</th>
+</tr>
+</thead>
+<tbody id="upcomingBody"></tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section class="section" id="remindersSection" style="display:none;">
+<div class="row g-4">
+<div class="col-lg-5">
+<div class="card">
+<div class="card-header d-flex align-items-center">
+<strong>All Reminders</strong>
+<div class="ms-auto">
+<button class="btn btn-sm btn-primary" data-bs-target="#reminderModal" data-bs-toggle="modal"><i class="fas fa-plus me-1"></i> Add Reminder</button>
+</div>
+</div>
+<div class="card-body p-0">
+<div class="table-responsive">
+<table class="table table-hover mb-0">
+<thead>
+<tr>
+<th style="width:5%;">Sl.</th>
+<th style="width:15%;">Date</th>
+<th style="width:65%;">Note</th>
+<th style="width:15%;">Actions</th>
+</tr>
+</thead>
+<tbody id="remindersTableBody"></tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="col-lg-7"> <div class="card h-100">
+<div class="card-header"><strong>Reminder Calendar</strong></div>
+<div class="card-body">
+<div id="remindersCalendar"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- WHAT WORK TODAY SECTION -->
+<section class="section" id="whatworkSection" style="display:none;">
+<div class="row g-4">
+<div class="col-lg-5">
+<div class="card">
+<div class="card-header d-flex align-items-center">
+<strong>What work today</strong>
+</div>
+<div class="card-body">
+<form autocomplete="off" id="whatworkForm">
+<input id="whatworkId" type="hidden"/>
+<div class="mb-3">
+<label class="form-label">Date <span class="text-danger">*</span></label>
+<input class="form-control" id="whatworkDate" required="" type="date"/>
+</div>
+<div class="mb-3">
+<label class="form-label">Note <span class="text-danger">*</span></label>
+<textarea class="form-control" id="whatworkNote" required="" rows="4"></textarea>
+</div>
+<div class="d-flex gap-2">
+<button class="btn btn-danger" id="btnDeleteWhatwork" style="display:none;" type="button">Delete</button>
+<button class="btn btn-primary" id="btnSaveWhatwork" type="submit">Save</button>
+<button class="btn btn-outline-secondary" id="btnClearWhatwork" type="button">Clear</button>
+</div>
+</form>
+</div>
+</div>
+</div>
+<div class="col-lg-7">
+<div class="card h-100">
+<div class="card-header d-flex align-items-center">
+<strong>All: What work today</strong>
+<div class="ms-auto small-muted" id="whatworkCount">0 items</div>
+</div>
+<div class="card-body p-0">
+<div class="table-responsive">
+<table class="table table-hover mb-0">
+<thead>
+<tr>
+<th style="width:5%;">Sl.</th>
+<th style="width:15%;">Date</th>
+<th>Note</th>
+<th style="width:15%;">Actions</th>
+</tr>
+</thead>
+<tbody id="whatworkTableBody"></tbody>
+</table>
+</div>
+</div>
+<div class="card-footer bg-white d-flex justify-content-between align-items-center">
+<small class="text-muted" id="whatworkFooter">Showing 0</small>
+<nav>
+<ul class="pagination pagination-sm mb-0" id="whatworkPagination"></ul>
+</nav>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- RECORD OF TRANSACTION SECTION -->
+<section class="section" id="transactionsSection" style="display:none;">
+<div class="card shadow-sm rounded-3">
+<div class="card-header bg-white border-0 d-flex align-items-center justify-content-between">
+<div class="d-flex align-items-center gap-3">
+<div class="avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width:44px;height:44px;">
+<i class="fas fa-money-bill-wave"></i>
+</div>
+<div>
+<h5 class="mb-0">Daily Transaction</h5>
+<small class="text-muted">Daily deposit &amp; expenses</small>
+</div>
+</div>
+<div class="d-flex gap-2 align-items-center">
+<!-- header controls -->
+</div>
+</div>
+<div class="card-body">
+<!-- Summary cards -->
+<div class="row g-3 mb-3">
+<div class="col-md-4">
+<div class="p-3 rounded-3 bg-white shadow-sm d-flex align-items-center gap-3" style="border-left:4px solid #0ea5e9;">
+<div class="bg-white text-primary" style="font-size:22px;"><i class="fas fa-arrow-up"></i></div>
+<div>
+<small class="text-muted">Total Deposit</small>
+<div class="h5 mb-0" id="total-deposit-card">₹0.00</div>
+</div>
+</div>
+</div>
+<div class="col-md-4">
+<div class="p-3 rounded-3 bg-white shadow-sm d-flex align-items-center gap-3" style="border-left:4px solid #ef4444;">
+<div class="bg-white text-danger" style="font-size:22px;"><i class="fas fa-arrow-down"></i></div>
+<div>
+<small class="text-muted">Total Expenses</small>
+<div class="h5 mb-0" id="total-expenses-card">₹0.00</div>
+</div>
+</div>
+</div>
+<div class="col-md-4">
+<div class="p-3 rounded-3 bg-white shadow-sm d-flex align-items-center gap-3" style="border-left:4px solid #10b981;">
+<div class="bg-white text-success" style="font-size:22px;"><i class="fas fa-balance-scale"></i></div>
+<div>
+<small class="text-muted">Balance</small>
+<div class="h5 mb-0" id="total-balance-card">₹0.00</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Inputs and chart -->
+<div class="row">
+<div class="col-lg-6 mb-3">
+<div class="card border-0 shadow-sm">
+<div class="card-body">
+<h6 class="mb-3">Add Deposit</h6>
+<div class="row g-2 align-items-end">
+<div class="col-6">
+<label class="form-label small">Date</label>
+<input class="form-control form-control-sm" id="deposit-date" type="date"/>
+</div>
+<div class="col-6 d-flex align-items-end">
+<div style="width:100%;">
+<label class="form-label small">Details</label>
+<input class="form-control form-control-sm" id="deposit-details" placeholder="e.g., Salary"/>
+</div>
+</div>
+<div class="col-8 mt-2">
+<label class="form-label small"> </label>
+<div>
+<button class="btn btn-primary" id="deposit-save-btn" type="button"><i class="fas fa-plus me-1"></i> Add Deposit</button>
+</div>
+</div>
+<div class="col-4 mt-2">
+<label class="form-label small">Amount (₹)</label>
+<input class="form-control form-control-sm" id="deposit-amount" placeholder="e.g. 1,000.00" type="text"/>
+</div>
+</div>
+</div>
+</div>
+<div class="card border-0 shadow-sm mt-3">
+<div class="card-body">
+<h6 class="mb-3">Add Expense</h6>
+<div class="row g-2 align-items-end">
+<div class="col-6">
+<label class="form-label small">Date</label>
+<input class="form-control form-control-sm" id="expense-date" type="date"/>
+</div>
+<div class="col-6 d-flex align-items-end">
+<div style="width:100%;">
+<label class="form-label small">Details</label>
+<input class="form-control form-control-sm" id="expense-details" placeholder="e.g., Office supplies"/>
+</div>
+</div>
+<div class="col-8 mt-2">
+<label class="form-label small"> </label>
+<div>
+<button class="btn btn-primary" id="expense-save-btn" type="button"><i class="fas fa-plus me-1"></i> Add Expense</button>
+</div>
+</div>
+<div class="col-4 mt-2">
+<label class="form-label small">Amount (₹)</label>
+<input class="form-control form-control-sm" id="expense-amount" placeholder="e.g. 500.00" type="text"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-lg-6">
+<div class="card border-0 shadow-sm p-3">
+<h6 class="mb-3">Quick Actions</h6>
+<div class="d-flex flex-wrap gap-2">
+<button class="btn btn-outline-primary btn-sm" id="saveAsPdfBtnTop"><i class="fas fa-file-pdf me-1"></i> Save as PDF</button>
+<button class="btn btn-outline-success btn-sm" id="exportXlsxBtnTop"><i class="fas fa-file-excel me-1"></i> Export XLSX</button>
+<button class="btn btn-danger btn-sm" id="clearAllBtnTop"><i class="fas fa-trash me-1"></i> Clear All</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Tables: Deposits first, Expenses below -->
+<div class="row mt-3">
+<div class="col-12">
+<div class="table-responsive card border-0 shadow-sm p-3 mb-3">
+<h6 class="mb-3">Deposit Records</h6>
+<table class="table table-sm" id="deposits-table-dt">
+<thead><tr><th>#</th><th>Date</th><th>Details</th><th class="text-end">Amount</th><th class="no-print">Actions</th></tr></thead>
+<tbody id="deposits-body-dt"><tr class="empty-row"><td colspan="5">No deposits recorded yet</td></tr></tbody>
+</table>
+<div class="d-flex justify-content-between align-items-center">
+<small class="text-muted">Showing <span id="deposits-showing-dt">0</span> of <span id="deposits-total-dt">0</span></small>
+<div>
+<button class="btn btn-sm btn-outline-secondary" id="deposits-prev-dt" type="button">Previous</button>
+<button class="btn btn-sm btn-outline-secondary" id="deposits-next-dt" type="button">Next</button>
+</div>
+</div>
+</div>
+<div class="table-responsive card border-0 shadow-sm p-3">
+<h6 class="mb-3">Expenses Records</h6>
+<table class="table table-sm" id="expenses-table-dt">
+<thead><tr><th>#</th><th>Date</th><th>Details</th><th class="text-end">Amount</th><th class="no-print">Actions</th></tr></thead>
+<tbody id="expenses-body-dt"><tr class="empty-row"><td colspan="5">No expenses recorded yet</td></tr></tbody>
+</table>
+<div class="d-flex justify-content-between align-items-center">
+<small class="text-muted">Showing <span id="expenses-showing-dt">0</span> of <span id="expenses-total-dt">0</span></small>
+<div>
+<button class="btn btn-sm btn-outline-secondary" id="expenses-prev-dt" type="button">Previous</button>
+<button class="btn btn-sm btn-outline-secondary" id="expenses-next-dt" type="button">Next</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Include xlsx library once (already present in original but safe to include for this section) -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script>
+  (function(){
+    'use strict';
+    // Keys: try legacy and new keys so user's existing localStorage is preserved
+    const KEYS_DEP = ['cm_deposits_final', 'cm_deposits_v1', 'cm_deposits'];
+    const KEYS_EXP = ['cm_expenses_final', 'cm_expenses_v1', 'cm_expenses'];
+
+    const PAGE_SIZE = 5; // rows per page
+    let deposits = [];
+    let expenses = [];
+    let depPage = 0, expPage = 0;
+
+    const $ = id => document.getElementById(id);
+    function todayISO(){ return new Date().toISOString().split('T')[0]; }
+    function parseAmount(v){ if(v === undefined || v === null) return NaN; const s = String(v).replace(/[₹,\\s]/g, '').trim(); const n = Number(s); return Number.isFinite(n) ? n : NaN; }
+    function fmt(v){ return '₹' + Number(v||0).toFixed(2); }
+
+    function loadFromKeys(keys){
+      for(const k of keys){
+        try{
+          const raw = localStorage.getItem(k);
+          if(raw){
+            const parsed = JSON.parse(raw);
+            if(Array.isArray(parsed) && parsed.length>0) return parsed;
+          }
+        }catch(e){}
+      }
+      return [];
+    }
+
+    function load(){ deposits = loadFromKeys(KEYS_DEP); expenses = loadFromKeys(KEYS_EXP); clampPages(); renderAll(); }
+
+    function save(){
+      // Save to primary key (preserve older keys but write to final keys)
+      try{ localStorage.setItem(KEYS_DEP[0], JSON.stringify(deposits)); }catch(e){ console.warn(e); }
+      try{ localStorage.setItem(KEYS_EXP[0], JSON.stringify(expenses)); }catch(e){ console.warn(e); }
+      clampPages(); renderAll();
+    }
+
+    function clampPages(){
+      depPage = Math.max(0, Math.min(depPage, Math.max(0, Math.ceil(deposits.length / PAGE_SIZE) - 1)));
+      expPage = Math.max(0, Math.min(expPage, Math.max(0, Math.ceil(expenses.length / PAGE_SIZE) - 1)));
+    }
+
+    function renderDeposits(){
+      const tbody = $('deposits-body-dt'); tbody.innerHTML=''; if(!deposits || deposits.length===0){ tbody.innerHTML = '<tr class="empty-row"><td colspan="5">No deposits recorded yet</td></tr>'; updateDepositsPagination(); return; }
+      const start = depPage * PAGE_SIZE; const end = Math.min(start+PAGE_SIZE, deposits.length);
+      for(let i=start;i<end;i++){ const r=deposits[i]; const tr=document.createElement('tr'); tr.innerHTML = '<td>'+(i+1)+'</td><td>'+r.date+'</td><td>'+(r.details||'')+'</td><td class="text-end">'+fmt(r.amount)+'</td><td class="no-print"><button data-id="'+r.id+'" data-type="edit-dep" class="btn btn-sm btn-warning me-1">Edit</button><button data-id="'+r.id+'" data-type="del-dep" class="btn btn-sm btn-danger">Del</button></td>'; tbody.appendChild(tr); }
+      updateDepositsPagination();
+    }
+    function renderExpenses(){ const tbody = $('expenses-body-dt'); tbody.innerHTML=''; if(!expenses || expenses.length===0){ tbody.innerHTML = '<tr class="empty-row"><td colspan="5">No expenses recorded yet</td></tr>'; updateExpensesPagination(); return; }
+      const start = expPage * PAGE_SIZE; const end = Math.min(start+PAGE_SIZE, expenses.length);
+      for(let i=start;i<end;i++){ const r=expenses[i]; const tr=document.createElement('tr'); tr.innerHTML = '<td>'+(i+1)+'</td><td>'+r.date+'</td><td>'+(r.details||'')+'</td><td class="text-end">'+fmt(r.amount)+'</td><td class="no-print"><button data-id="'+r.id+'" data-type="edit-exp" class="btn btn-sm btn-warning me-1">Edit</button><button data-id="'+r.id+'" data-type="del-exp" class="btn btn-sm btn-danger">Del</button></td>'; tbody.appendChild(tr); }
+      updateExpensesPagination();
+    }
+
+    function updateDepositsPagination(){ const total = deposits.length; const start = total===0?0:depPage*PAGE_SIZE+1; const end = Math.min((depPage+1)*PAGE_SIZE, total); $('deposits-showing-dt').textContent = start + ' - ' + end; $('deposits-total-dt').textContent = total; $('deposits-prev-dt').disabled = depPage<=0; $('deposits-next-dt').disabled = (depPage+1)*PAGE_SIZE >= total; }
+    function updateExpensesPagination(){ const total = expenses.length; const start = total===0?0:expPage*PAGE_SIZE+1; const end = Math.min((expPage+1)*PAGE_SIZE, total); $('expenses-showing-dt').textContent = start + ' - ' + end; $('expenses-total-dt').textContent = total; $('expenses-prev-dt').disabled = expPage<=0; $('expenses-next-dt').disabled = (expPage+1)*PAGE_SIZE >= total; }
+
+    function updateTotals(){ const totalDep = deposits.reduce((s,d)=> s + Number(d.amount||0),0); const totalExp = expenses.reduce((s,e)=> s + Number(e.amount||0),0); const bal = totalDep - totalExp; if($('total-deposit-card')) $('total-deposit-card').textContent = fmt(totalDep); if($('total-expenses-card')) $('total-expenses-card').textContent = fmt(totalExp); if($('total-balance-card')) $('total-balance-card').textContent = fmt(bal); }
+
+    function renderAll(){ renderDeposits(); renderExpenses(); updateTotals(); }
+
+    function addOrUpdateDeposit(){ const date = $('deposit-date').value || todayISO(); const details = $('deposit-details').value.trim(); const amount = parseAmount($('deposit-amount').value); if(!date || isNaN(amount) || amount<=0){ alert('Enter valid date and amount (>0).'); return; } deposits.push({ id: Date.now(), date, details, amount: Number(amount) }); $('deposit-amount').value=''; $('deposit-details').value=''; $('deposit-date').value = todayISO(); depPage = Math.max(0, Math.ceil(deposits.length / PAGE_SIZE) - 1); save(); }
+
+    function addOrUpdateExpense(){ const date = $('expense-date').value || todayISO(); const details = $('expense-details').value.trim(); const amount = parseAmount($('expense-amount').value); if(!date || !details || isNaN(amount) || amount<=0){ alert('Enter valid date, details and amount (>0).'); return; } expenses.push({ id: Date.now(), date, details, amount: Number(amount) }); $('expense-amount').value=''; $('expense-details').value=''; $('expense-date').value = todayISO(); expPage = Math.max(0, Math.ceil(expenses.length / PAGE_SIZE) - 1); save(); }
+
+    function startEditDeposit(id){ const idx = deposits.findIndex(d=>d.id===id); if(idx===-1) return; const rec = deposits[idx]; $('deposit-date').value = rec.date; $('deposit-details').value = rec.details||''; $('deposit-amount').value = Number(rec.amount).toFixed(2); deposits.splice(idx,1); depPage = Math.max(0, Math.ceil(deposits.length / PAGE_SIZE) - 1); renderAll(); }
+    function startEditExpense(id){ const idx = expenses.findIndex(e=>e.id===id); if(idx===-1) return; const rec = expenses[idx]; $('expense-date').value = rec.date; $('expense-details').value = rec.details||''; $('expense-amount').value = Number(rec.amount).toFixed(2); expenses.splice(idx,1); expPage = Math.max(0, Math.ceil(expenses.length / PAGE_SIZE) - 1); renderAll(); }
+
+    function deleteDeposit(id){ if(!confirm('Delete this deposit?')) return; deposits = deposits.filter(d=>d.id!==id); if(depPage>0 && depPage*PAGE_SIZE>=deposits.length) depPage--; save(); }
+    function deleteExpense(id){ if(!confirm('Delete this expense?')) return; expenses = expenses.filter(e=>e.id!==id); if(expPage>0 && expPage*PAGE_SIZE>=expenses.length) expPage--; save(); }
+
+    function exportToXLSX(){ if(typeof XLSX==='undefined'){ alert('XLSX lib not loaded.'); return; } const totalDep = deposits.reduce((s,d)=> s + Number(d.amount||0),0); const totalExp = expenses.reduce((s,e)=> s + Number(e.amount||0),0); const balance = totalDep - totalExp; const depRows=[['SL No','Date','Details','Amount']]; deposits.forEach((r,i)=>depRows.push([i+1,r.date,r.details||'',Number(r.amount)])); const expRows=[['SL No','Date','Details','Amount']]; expenses.forEach((r,i)=>expRows.push([i+1,r.date,r.details||'',Number(r.amount)])); const combined=[]; deposits.forEach(d=>combined.push({type:'Deposit',date:d.date,details:d.details,amount:Number(d.amount||0),id:d.id||0})); expenses.forEach(e=>combined.push({type:'Expense',date:e.date,details:e.details,amount:Number(e.amount||0),id:e.id||0})); combined.sort((a,b)=>{ if(a.date<b.date) return -1; if(a.date>b.date) return 1; return (a.id||0)-(b.id||0); }); const transRows=[['SL No','Date','Type','Details','Amount','Balance']]; let running=0; combined.forEach((row,i)=>{ if(row.type==='Deposit') running += Number(row.amount||0); else running -= Number(row.amount||0); const amtSigned = (row.type==='Deposit') ? Number(row.amount||0) : -Number(row.amount||0); transRows.push([i+1,row.date,row.type,row.details||'',amtSigned,running]); }); const summary=[['Key','Value'], ['Total Deposits', totalDep], ['Total Expenses', totalExp], ['Balance', balance], ['Generated On', new Date().toLocaleString()]]; const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(summary), 'Summary'); XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(depRows), 'Deposits'); XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(expRows), 'Expenses'); XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(transRows), 'Transactions'); const wbout = XLSX.write(wb,{bookType:'xlsx',type:'array'}); const blob = new Blob([wbout],{type:'application/octet-stream'}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'transactions_full_' + new Date().toISOString().split('T')[0] + '.xlsx'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); }
+
+    function saveAsPDF(){ const totalDep = deposits.reduce((s,d)=> s + Number(d.amount||0),0); const totalExp = expenses.reduce((s,e)=> s + Number(e.amount||0),0); const balance = totalDep - totalExp; let depRows=''; if(!deposits||deposits.length===0) depRows='<tr><td colspan="4">No deposits</td></tr>'; else for(let i=0;i<deposits.length;i++){ const r=deposits[i]; depRows += '<tr><td>'+(i+1)+'</td><td>'+r.date+'</td><td>'+(r.details||'')+'</td><td style="text-align:right">'+fmt(r.amount)+'</td></tr>'; } let expRows=''; if(!expenses||expenses.length===0) expRows='<tr><td colspan="4">No expenses</td></tr>'; else for(let i=0;i<expenses.length;i++){ const r=expenses[i]; expRows += '<tr><td>'+(i+1)+'</td><td>'+r.date+'</td><td>'+(r.details||'')+'</td><td style="text-align:right">'+fmt(r.amount)+'</td></tr>'; } const popup = window.open('','_blank','width=1000,height=800'); if(!popup){ alert('Popup blocked — allow popups to save PDF.'); return; } const html = '<!doctype html><html><head><meta charset="utf-8"><title>Transactions Report</title>' + '<style>body{font-family:Inter,Arial,sans-serif;padding:20px;} table{width:100%;border-collapse:collapse;} th,td{border:1px solid #ddd;padding:8px;} th{background:#f7f7f7;}</style>' + '</head><body>' + '<h2>Daily Transaction</h2><div>Generated: ' + new Date().toLocaleString() + '</div>' + '<div style="margin:12px 0;padding:10px;border:1px solid #eee;display:flex;gap:12px;">' + '<div><small>Total Deposits</small><div>'+fmt(totalDep)+'</div></div>' + '<div><small>Total Expenses</small><div>'+fmt(totalExp)+'</div></div>' + '<div><small>Balance</small><div>'+fmt(balance)+'</div></div>' + '</div>' + '<h4>Deposits</h4><table><thead><tr><th>#</th><th>Date</th><th>Details</th><th style="text-align:right">Amount</th></tr></thead><tbody>' + depRows + '</tbody></table>' + '<h4 style="margin-top:18px;">Expenses</h4><table><thead><tr><th>#</th><th>Date</th><th>Details</th><th style="text-align:right">Amount</th></tr></thead><tbody>' + expRows + '</tbody></table>' + '<script>setTimeout(function(){ window.print(); }, 300);<\/script>' + '</body></html>'; popup.document.open(); popup.document.write(html); popup.document.close(); }
+
+    function clearAll(){ if(!confirm('Clear all deposits and expenses? This cannot be undone.')) return; deposits = []; expenses = []; depPage=0; expPage=0; save(); }
+
+    function wireEvents(){
+      if($('deposit-date')) $('deposit-date').value = todayISO();
+      if($('expense-date')) $('expense-date').value = todayISO();
+      if($('deposit-save-btn')) $('deposit-save-btn').addEventListener('click', addOrUpdateDeposit);
+      if($('expense-save-btn')) $('expense-save-btn').addEventListener('click', addOrUpdateExpense);
+      if($('saveAsPdfBtnTop')) $('saveAsPdfBtnTop').addEventListener('click', saveAsPDF);
+      if($('exportXlsxBtnTop')) $('exportXlsxBtnTop').addEventListener('click', exportToXLSX);
+      if($('clearAllBtnTop')) $('clearAllBtnTop').addEventListener('click', clearAll);
+
+      const depBody = $('deposits-body-dt');
+      if(depBody) depBody.addEventListener('click', function(ev){ const btn = ev.target.closest('button'); if(!btn) return; const id = Number(btn.getAttribute('data-id')); const type = btn.getAttribute('data-type'); if(type==='edit-dep') startEditDeposit(id); else if(type==='del-dep') deleteDeposit(id); });
+
+      const expBody = $('expenses-body-dt');
+      if(expBody) expBody.addEventListener('click', function(ev){ const btn = ev.target.closest('button'); if(!btn) return; const id = Number(btn.getAttribute('data-id')); const type = btn.getAttribute('data-type'); if(type==='edit-exp') startEditExpense(id); else if(type==='del-exp') deleteExpense(id); });
+
+      if($('deposits-prev-dt')) $('deposits-prev-dt').addEventListener('click', function(){ if(depPage>0) depPage--; renderDeposits(); });
+      if($('deposits-next-dt')) $('deposits-next-dt').addEventListener('click', function(){ if((depPage+1)*PAGE_SIZE < deposits.length) depPage++; renderDeposits(); });
+      if($('expenses-prev-dt')) $('expenses-prev-dt').addEventListener('click', function(){ if(expPage>0) expPage--; renderExpenses(); });
+      if($('expenses-next-dt')) $('expenses-next-dt').addEventListener('click', function(){ if((expPage+1)*PAGE_SIZE < expenses.length) expPage++; renderExpenses(); });
+    }
+
+    document.addEventListener('DOMContentLoaded', function(){ wireEvents(); load(); });
+
+    // expose functions
+    window._dailyTx = { load, save, deposits, expenses };
+    window.exportToXLSX = exportToXLSX;
+    window.saveAsPDF = saveAsPDF;
+  })();
+  </script>
+</section>
+<section class="section" id="backupSection" style="display:none;">
+<div class="card">
+<div class="card-header"><strong>Data Backup &amp; Restore</strong></div>
+<div class="card-body">
+<p>Use the buttons below to create a comprehensive backup of all application data (Cases, Tasks, Reminders, Courts, Case Types).</p>
+<h5 class="mt-4">Full Data Backup (JSON)</h5>
+<button class="btn btn-primary me-2" id="exportAllJson"><i class="fas fa-download me-1"></i> Export Full JSON Backup</button>
+<p class="small text-muted mt-2">Exports all Cases, Tasks, and Reminders into one structured JSON file. Recommended for full data restoration.</p>
+<h5 class="mt-4">Import Full Data (JSON)</h5>
+<input accept=".json" id="importJsonInput" style="display:none;" type="file">
+<button class="btn btn-warning text-dark me-2" id="importAllJson" onclick="document.getElementById('importJsonInput').click();"><i class="fas fa-upload me-1"></i> Restore Full JSON Backup</button>
+<p class="small text-danger mt-2">WARNING: Restoring JSON data will overwrite all existing Cases, Tasks, Reminders, Courts, and Case Types.</p>
+<hr class="mt-4 mb-4"/>
+<h5 class="mt-4">Case Data Backup (XLSX)</h5>
+<button class="btn btn-outline-success me-2" id="exportXLSXBackup"><i class="fas fa-file-excel me-1"></i> Export Cases to XLSX</button>
+<p class="small text-muted mt-2">Exports only the Cases data into a Microsoft Excel file for easy review and bulk edit.</p>
+<h5 class="mt-4">Import Case Data (XLSX)</h5>
+<input accept=".xlsx,.xls" id="importXLSXInputBackup" style="display:none;" type="file">
+<button class="btn btn-outline-primary me-2" id="importXLSXBackup" onclick="document.getElementById('importXLSXInputBackup').click();"><i class="fas fa-file-import me-1"></i> Import Cases from XLSX</button>
+<p class="small text-danger mt-2">WARNING: Imported cases will be *added* to your existing cases list.</p>
+</input></input></div>
+</div>
+</section>
+</main>
+</div>
+</div>
+<!-- Case Detail Modal with Scroll and PDF Button -->
+<div aria-hidden="true" aria-labelledby="caseDetailModalLabel" class="modal fade" id="caseDetailModal" tabindex="-1">
+<div class="modal-dialog modal-xl modal-dialog-centered">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="caseDetailModalLabel">Case Details</h5>
+<button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+</div>
+<div class="modal-body case-detail-modal-body">
+<div class="row">
+<div class="col-md-8">
+<h4 class="mb-3" id="modalCaseTitle"></h4>
+<dl class="modal-details-grid">
+<dt>Court</dt><dd id="modalCourt"></dd>
+<dt>Case Type</dt><dd id="modalCaseType"></dd>
+<dt>Parties</dt><dd id="modalParties"></dd>
+<dt>My Client</dt><dd id="modalClientType"></dd>
+<dt>Status</dt><dd id="modalStatus"></dd>
+<dt>Next Hearing</dt><dd id="modalNextHearing"></dd>
+<dt>Filing Date</dt><dd id="modalFilingDate"></dd>
+<dt>Contact</dt><dd id="modalContact"></dd>
+<dt>CNR Number</dt><dd id="modalCNR"></dd>
+<dt>Injunction</dt><dd id="modalInjunction"></dd>
+<dt>Priority</dt><dd id="modalPriority"></dd>
+<dt>Money History</dt><dd id="modalMoneyHistory"></dd>
+<dt>Address</dt><dd id="modalAddress"></dd>
+<dt>Linked Case</dt><dd id="modalLinkedCase"></dd>
+<dt>Special Judgement</dt><dd id="modalSpecialJudgement"></dd>
+</dl>
+<hr/>
+<h6>Details / Notes</h6>
+<p class="text-muted" id="modalDetails"></p>
+</div>
+<div class="col-md-4">
+<h6>Client Photo</h6>
+<div class="modal-image-container mb-3" id="modalPhoto"></div>
+<h6>Signature</h6>
+<div class="modal-image-container mb-3" id="modalSignature"></div>
+<h6>QR Code</h6>
+<div class="modal-image-container" id="modalQrCode"></div>
+</div>
+</div>
+</div>
+<div class="modal-footer">
+<button class="btn btn-danger" id="btnCasePDF" type="button"><i class="fas fa-file-pdf me-1"></i> Save as PDF</button>
+<button class="btn btn-secondary" onclick="printCaseDetails()" type="button"><i class="fas fa-print me-1"></i> Print</button>
+<button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Hidden div for case printing -->
+<div id="casePrintContainer" style="display:none;"></div>
+<div aria-hidden="true" aria-labelledby="dayEventsModalLabel" class="modal fade" id="dayEventsModal" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="dayEventsModalLabel">Cases for Date</h5>
+<button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+</div>
+<div class="modal-body">
+<ul class="list-group" id="dayEventsModalList"></ul>
+</div>
+</div>
+</div>
+</div>
+<div aria-hidden="true" aria-labelledby="taskModalLabel" class="modal fade" id="taskModal" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="taskModalLabel">Add New Task</h5>
+<button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+</div>
+<div class="modal-body">
+<form id="taskForm">
+<input id="taskId" type="hidden"/>
+<div class="mb-3">
+<label class="form-label">Date <span class="text-danger">*</span></label>
+<input class="form-control" id="taskDate" required="" type="date"/>
+</div>
+<div class="mb-3">
+<label class="form-label">Note <span class="text-danger">*</span></label>
+<textarea class="form-control" id="taskNote" required="" rows="3"></textarea>
+</div>
+<div class="mb-3">
+<label class="form-label">Priority</label>
+<select class="form-select" id="taskPriority">
+<option value="Low">Low</option>
+<option selected="" value="Medium">Medium</option>
+<option value="High">High</option>
+</select>
+</div>
+<div class="modal-footer">
+<button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
+<button class="btn btn-danger" id="btnDeleteTask" style="display:none;" type="button">Delete</button>
+<button class="btn btn-primary" id="btnSaveTask" type="submit">Save Task</button>
+</div>
+</form>
+</div>
+</div>
+</div>
+</div>
+<div aria-hidden="true" aria-labelledby="reminderModalLabel" class="modal fade" id="reminderModal" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="reminderModalLabel">Add New Reminder</h5>
+<button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+</div>
+<div class="modal-body">
+<form id="reminderForm">
+<input id="reminderId" type="hidden"/>
+<div class="mb-3">
+<label class="form-label">Date <span class="text-danger">*</span></label>
+<input class="form-control" id="reminderDate" required="" type="date"/>
+</div>
+<div class="mb-3">
+<label class="form-label">Note <span class="text-danger">*</span></label>
+<textarea class="form-control" id="reminderNote" required="" rows="4"></textarea>
+</div>
+<div class="modal-footer">
+<button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
+<button class="btn btn-danger" id="btnDeleteReminder" style="display:none;" type="button">Delete</button>
+<button class="btn btn-primary" id="btnSaveReminder" type="submit">Save Reminder</button>
+</div>
+</form>
+</div>
+</div>
+</div>
+</div>
+<div aria-hidden="true" aria-labelledby="taskDetailModalLabel" class="modal fade" id="taskDetailModal" tabindex="-1">
+<div class="modal-dialog modal-lg modal-dialog-scrollable">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="taskDetailModalLabel">Task Details</h5>
+<button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+</div>
+<div class="modal-body task-modal-content">
+<div class="task-detail-item">
+<div class="task-detail-label">Date</div>
+<div class="task-detail-value" id="taskDetailDate"></div>
+</div>
+<div class="task-detail-item">
+<div class="task-detail-label">Note</div>
+<div class="task-detail-value" id="taskDetailNote"></div>
+</div>
+<div class="task-detail-item">
+<div class="task-detail-label">Priority</div>
+<div class="task-detail-value">
+<span class="badge" id="taskDetailPriority"></span>
+</div>
+</div>
+</div>
+<div class="modal-footer">
+<button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div aria-hidden="true" aria-labelledby="previewModalLabel" class="modal fade" id="previewModal" tabindex="-1">
+<div class="modal-dialog modal-lg modal-dialog-scrollable">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="previewModalLabel">Case Preview</h5>
+<button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+</div>
+<div class="modal-body">
+<div class="preview-modal-grid">
+<div class="preview-item">
+<div class="preview-label">Case No</div>
+<div class="preview-value" id="previewCaseNo"></div>
+</div>
+<div class="preview-item">
+<div class="preview-label">Year</div>
+<div class="preview-value" id="previewYear"></div>
+</div>
+<div class="preview-item">
+<div class="preview-label">Court</div>
+<div class="preview-value" id="previewCourt"></div>
+</div>
+<div class="preview-item">
+<div class="preview-label">Case Type</div>
+<div class="preview-value" id="previewCaseType"></div>
+</div>
+<div class="preview-item">
+<div class="preview-label">Parties</div>
+<div class="preview-value" id="previewParties"></div>
+</div>
+<div class="preview-item">
+<div class="preview-label">My Client</div>
+<div class="preview-value" id="previewClientType"></div>
+</div>
+<div class="preview-item">
+<div class="preview-label">Contact No</div>
+<div class="preview-value" id="previewContact"></div>
+</div>
+<div class="preview-item">
+<div class="preview-label">Injunction</div>
+<div class="preview-value" id="previewInjunction"></div>
+</div>
+<div class="preview-item">
+<div class="preview-label">Priority</div>
+<div class="preview-value" id="previewPriority"></div>
+</div>
+<div class="preview-item">
+<div class="preview-label">CNR No</div>
+<div class="preview-value" id="previewCNR"></div>
+</div>
+<div class="preview-item">
+<div class="preview-label">Filing Date</div>
+<div class="preview-value" id="previewFilingDate"></div>
+</div>
+<div class="preview-item">
+<div class="preview-label">Next Hearing</div>
+<div class="preview-value" id="previewNextHearing"></div>
+</div>
+<div class="preview-item">
+<div class="preview-label">Address</div>
+<div class="preview-value" id="previewAddress"></div>
+</div>
+<div class="preview-item">
+<div class="preview-label">Money History</div>
+<div class="preview-value" id="previewMoneyHistory"></div>
+</div>
+<div class="preview-item">
+<div class="preview-label">Linked Case</div>
+<div class="preview-value" id="previewLinkedCase"></div>
+</div>
+<div class="preview-item full-width">
+<div class="preview-label">Special Judgement</div>
+<div class="preview-value" id="previewSpecialJudgement"></div>
+</div>
+<div class="preview-item full-width">
+<div class="preview-label">Details / Notes</div>
+<div class="preview-value" id="previewDetails"></div>
+</div>
+</div>
+<div class="row mt-3">
+<div class="col-md-6">
+<div class="preview-label">Client Photo</div>
+<div class="modal-image-container mt-2" id="previewPhoto"></div>
+</div>
+<div class="col-md-6">
+<div class="preview-label">Client Signature</div>
+<div class="modal-image-container mt-2" id="previewSignature"></div>
+</div>
+</div>
+</div>
+<div class="modal-footer">
+<button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
+</div>
+</div>
+</div>
+</div>
+<!-- External JS Libraries -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales-all.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+<!-- Main Application Script -->
+<script>
+// --- CONSTANTS AND CONFIGURATION ---
+    const TIME_ZONE = 'Asia/Kolkata'; 
+    const STORAGE_KEY = 'case_management_cases';
+    const TASKS_STORAGE_KEY = 'case_management_tasks';
+    const REMINDERS_STORAGE_KEY = 'case_management_reminders';
+    const CASE_TYPES_KEY = 'case_management_case_types';
+    const COURTS_KEY = 'case_management_courts'; 
+
+    const ITEMS_PER_PAGE = 10;
+    
+    const SECTIONS = {
+      dashboard: document.getElementById('dashboardSection'),
+      cases: document.getElementById('casesSection'),
+      add: document.getElementById('addSection'),
+      calendar: document.getElementById('calendarSection'),
+      reports: document.getElementById('reportsSection'),
+      tasks: document.getElementById('tasksSection'),
+      upcoming: document.getElementById('upcomingSection'),
+      reminders: document.getElementById('remindersSection'),
+      backup: document.getElementById('backupSection'),
+      whatwork: document.getElementById('whatworkSection'),
+      transactions: document.getElementById('transactionsSection'),
+    };
+    
+    // Initial data arrays
+    let CASES = [];
+    let TASKS = [];
+    let REMINDERS = [];
+    let filteredCases = [];
+    let currentPage = 1;
+    let totalPages = 0;
+    
+    // Form Select options
+    const DEFAULT_COURTS = ['High Court', 'Civil Court', '1st Addl.M Court', '2nd Addl. M', '6th M', '7th Sub Judge', '2nd Sub Judge', '1st ADJ', '2nd ADJ', '3rd ADJ', '5th ADJ', '6th ADJ', '12th ADJ', '13th ADJ', 'Criminal Court', 'Executive Magistrate', 'Family Court', 'Tribunal', 'A.D.M & D.L. and L.R.O.', 'SDL & LRO', 'B.L. & L.R.O. Bhangar -I', 'B.L. & L.R.O. Bhangar -II', 'Supreme Court', 'District Court'];
+    let COURTS = []; 
+    let CASE_TYPES = [
+  'Title Suit No.',
+  'Misc Case No.',
+  'Misc Appeal No.',
+  'Title Appeal No.',
+  'L.A. Case No. (CD)',
+  'L.R. Appeal No.',
+  'M.P. Case No.',
+  'O.A. Case No.',
+  'MN Case No.',
+  'Conversion No.',
+  'Act 39 Case No.',
+  'Mat Suit No.',
+  'Others'
+];
+
+    // Global Calendar/Chart instance
+    let bigCalendarInstance = null;
+    let dashboardCalendarInstance = null;
+    let remindersCalendarInstance = null;
+    let caseTypeDashboardChartInstance = null;
+    let statusChartInstance = null;
+    let yearChartInstance = null;
+    let courtChartInstance = null;
+    let caseTypeReportChartInstance = null;
+
+    // Current case for PDF/Print
+    let currentCaseForPrint = null;
+
+    // --- UTILITY FUNCTIONS ---
+
+    const loadCases = () => JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    const saveCases = (cases) => localStorage.setItem(STORAGE_KEY, JSON.stringify(cases));
+    const loadTasks = () => JSON.parse(localStorage.getItem(TASKS_STORAGE_KEY) || '[]');
+    const saveTasks = (tasks) => localStorage.setItem(TASKS_STORAGE_KEY, JSON.stringify(tasks)); 
+    const loadReminders = () => JSON.parse(localStorage.getItem(REMINDERS_STORAGE_KEY) || '[]');
+    const saveReminders = (reminders) => localStorage.setItem(REMINDERS_STORAGE_KEY, JSON.stringify(reminders));
+    const loadCaseTypes = () => JSON.parse(localStorage.getItem(CASE_TYPES_KEY) || '[]');
+    const saveCaseTypes = (types) => localStorage.setItem(CASE_TYPES_KEY, JSON.stringify(types));
+    const loadCourts = () => JSON.parse(localStorage.getItem(COURTS_KEY) || '[]');
+    const saveCourts = (courts) => localStorage.setItem(COURTS_KEY, JSON.stringify(courts));
+
+    const formatDate = (dateStr) => {
+        if (!dateStr) return 'N/A';
+        try {
+            const parts = dateStr.split('-');
+            const date = new Date(parts[0], parts[1] - 1, parts[2]); 
+            return date.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+        } catch(e) {
+            return dateStr;
+        }
+    };
+
+    const getPriorityBadge = (priority) => {
+      switch (priority) {
+        case 'High': return `<span class="badge bg-danger">High</span>`;
+        case 'Medium': return `<span class="badge bg-warning text-dark">Medium</span>`;
+        case 'Low': return `<span class="badge bg-success">Low</span>`;
+        default: return `<span class="badge bg-secondary">Unknown</span>`;
+      }
+    };
+
+    const getCurrentCaseNumber = () => {
+        const caseNo = document.getElementById('caseNo').value;
+        const year = document.getElementById('year').value;
+        return `${caseNo || 'XXXX'}/${year || 'YYYY'}`;
+    };
+
+    const generateQrCode = (text, elementId) => {
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.innerHTML = '';
+            new QRCode(element, {
+                text: text,
+                width: 120,
+                height: 120,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+    };
+    
+    // --- FORM AND DATA MANAGEMENT ---
+
+    const handleCaseFormSubmit = (e) => {
+        e.preventDefault();
+        
+        const isEditing = !!document.getElementById('caseId').value;
+        const caseId = isEditing ? parseInt(document.getElementById('caseId').value) : Date.now();
+
+        const newCase = {
+            id: caseId,
+            court: document.getElementById('court').value,
+            caseType: document.getElementById('caseType').value,
+            caseNo: document.getElementById('caseNo').value,
+            year: document.getElementById('year').value,
+            parties: document.getElementById('parties').value,
+            clientType: document.getElementById('clientType').value,
+            contact: document.getElementById('contact').value,
+            injunction: document.getElementById('injunction').value,
+            priority: document.getElementById('priority').value,
+            cnr: document.getElementById('cnr').value,
+            filingDate: document.getElementById('filingDate').value,
+            nextHearing: document.getElementById('nextHearing').value,
+            address: document.getElementById('address').value,
+            moneyHistory: document.getElementById('moneyHistory').value,
+            linkedCase: document.getElementById('linkedCase').value,
+            specialJudgement: document.getElementById('specialJudgement').value,
+            details: document.getElementById('details').value,
+            status: document.getElementById('status').value,
+            photo: document.getElementById('photoPreview').dataset.fileData || '',
+            signature: document.getElementById('signaturePreview').dataset.fileData || ''
+        };
+
+        if (isEditing) {
+            const index = CASES.findIndex(c => c.id === caseId);
+            if (index !== -1) {
+                CASES[index] = newCase;
+            }
+            alert('Case updated successfully!');
+        } else {
+            CASES.push(newCase);
+            alert('New Case added successfully!');
+        }
+
+        saveCases(CASES);
+        clearCaseForm();
+        renderDashboard();
+        applyFilters();
+        updateCalendarEvents();
+        populateFilters();
+        populateCaseSelects();
+    };
+
+    const editCase = (id) => {
+        const caseData = CASES.find(c => c.id === id);
+        if (caseData) {
+            document.querySelector('.sidebar .nav-link[data-target="add"]').click();
+            
+            document.getElementById('caseId').value = caseData.id;
+            document.getElementById('court').value = caseData.court;
+            document.getElementById('caseType').value = caseData.caseType;
+            document.getElementById('caseNo').value = caseData.caseNo;
+            document.getElementById('year').value = caseData.year;
+            document.getElementById('parties').value = caseData.parties;
+            document.getElementById('clientType').value = caseData.clientType;
+            document.getElementById('contact').value = caseData.contact;
+            document.getElementById('injunction').value = caseData.injunction;
+            document.getElementById('priority').value = caseData.priority;
+            document.getElementById('cnr').value = caseData.cnr;
+            document.getElementById('filingDate').value = caseData.filingDate;
+            document.getElementById('nextHearing').value = caseData.nextHearing;
+            document.getElementById('address').value = caseData.address;
+            document.getElementById('moneyHistory').value = caseData.moneyHistory;
+            document.getElementById('linkedCase').value = caseData.linkedCase;
+            document.getElementById('specialJudgement').value = caseData.specialJudgement;
+            document.getElementById('details').value = caseData.details;
+            document.getElementById('status').value = caseData.status;
+
+            document.getElementById('photoPreview').dataset.fileData = caseData.photo;
+            document.getElementById('signaturePreview').dataset.fileData = caseData.signature;
+            setPreviewImage('photoPreview', caseData.photo);
+            setPreviewImage('signaturePreview', caseData.signature);
+            
+            document.getElementById('saveBtn').textContent = 'Update Case';
+
+            generateQrCode(`Case ID: ${caseData.id}, Case No: ${caseData.caseNo}/${caseData.year}`, 'inlineQr');
+        }
+    };
+
+    const deleteCase = (id) => {
+        if (confirm('Are you sure you want to delete this case? This action cannot be undone.')) {
+            CASES = CASES.filter(c => c.id !== id);
+            saveCases(CASES);
+            renderDashboard();
+            applyFilters();
+            updateCalendarEvents();
+            populateFilters();
+            populateCaseSelects();
+        }
+    };
+
+    const clearCaseForm = () => {
+        document.getElementById('caseForm').reset();
+        document.getElementById('caseId').value = '';
+        document.getElementById('saveBtn').textContent = 'Add Case';
+        document.getElementById('photoPreview').innerHTML = '<small class="text-muted">Preview</small>';
+        document.getElementById('signaturePreview').innerHTML = '<small class="text-muted">Preview</small>';
+        document.getElementById('photoPreview').dataset.fileData = '';
+        document.getElementById('signaturePreview').dataset.fileData = '';
+        document.getElementById('inlineQr').innerHTML = '';
+        document.getElementById('status').value = 'Active';
+    };
+
+    const setupFileReaders = () => {
+        const handleFile = (inputElementId, previewElementId) => {
+            const input = document.getElementById(inputElementId);
+            const preview = document.getElementById(previewElementId);
+            input.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const base64Data = e.target.result;
+                        preview.dataset.fileData = base64Data;
+                        setPreviewImage(previewElementId, base64Data);
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    preview.dataset.fileData = '';
+                    preview.innerHTML = '<small class="text-muted">Preview</small>';
+                }
+            });
+        };
+        handleFile('photo', 'photoPreview');
+        handleFile('signature', 'signaturePreview');
+    };
+
+    const setPreviewImage = (elementId, base64Data) => {
+        const preview = document.getElementById(elementId);
+        if (base64Data) {
+            preview.innerHTML = `<img src="${base64Data}" alt="Preview" />`;
+        } else {
+            preview.innerHTML = '<small class="text-muted">Preview</small>';
+        }
+    };
+
+    // --- CASE TABLE RENDERING AND FILTERING ---
+
+    const applyFilters = (page = 1) => {
+        const courtFilter = document.getElementById('filterCourt').value;
+        const yearFilter = document.getElementById('filterYear').value;
+        const statusFilter = document.getElementById('filterStatus').value;
+        const searchFilter = document.getElementById('searchInput').value.toLowerCase();
+        
+        filteredCases = CASES.filter(c => {
+            const matchesCourt = !courtFilter || c.court === courtFilter;
+            const matchesYear = !yearFilter || c.year == yearFilter;
+            const matchesStatus = !statusFilter || c.status === statusFilter;
+            const matchesSearch = !searchFilter || 
+                                  (c.caseNo && c.caseNo.toLowerCase().includes(searchFilter)) ||
+                                  (c.parties && c.parties.toLowerCase().includes(searchFilter)) ||
+                                  (c.details && c.details.toLowerCase().includes(searchFilter));
+            return matchesCourt && matchesYear && matchesStatus && matchesSearch;
+        });
+
+        currentPage = page;
+        totalPages = Math.ceil(filteredCases.length / ITEMS_PER_PAGE);
+        renderCasesTable();
+    };
+
+    const renderCasesTable = () => {
+        const tableBody = document.querySelector('#casesTable tbody');
+        const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+        const endIndex = startIndex + ITEMS_PER_PAGE;
+        const casesToShow = filteredCases.slice(startIndex, endIndex);
+
+        if (!tableBody) return;
+
+        tableBody.innerHTML = casesToShow.map(c => `
+            <tr>
+                <td>${c.caseType}</td>
+                <td>${c.caseNo}</td>
+                <td>${c.year}</td>
+                <td>${c.court}</td>
+                <td>${c.parties}</td>
+                <td>${formatDate(c.nextHearing)}</td>
+                <td>${c.contact}</td>
+                <td>${c.address ? c.address.substring(0, 30) + '...' : 'N/A'}</td>
+                <td>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-sm btn-outline-info" onclick="showCaseDetails(${c.id})"><i class="fas fa-eye"></i></button>
+                        <button class="btn btn-sm btn-outline-primary" onclick="editCase(${c.id})"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteCase(${c.id})"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+
+        document.getElementById('casesCount').textContent = `${filteredCases.length} cases found`;
+        renderPagination();
+    };
+
+    const renderPagination = () => {
+        const paginationEl = document.getElementById('pagination');
+        if (!paginationEl) return;
+        paginationEl.innerHTML = '';
+
+        const createPageItem = (text, page, active = false, disabled = false) => {
+            const li = document.createElement('li');
+            li.className = `page-item ${active ? 'active' : ''} ${disabled ? 'disabled' : ''}`;
+            const a = document.createElement('a');
+            a.className = 'page-link';
+            a.href = '#';
+            a.innerHTML = text;
+            a.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (!active && !disabled) applyFilters(page);
+            });
+            li.appendChild(a);
+            return li;
+        };
+
+        paginationEl.appendChild(createPageItem('&laquo;', currentPage - 1, false, currentPage === 1));
+        
+        for (let i = 1; i <= totalPages; i++) {
+            paginationEl.appendChild(createPageItem(i, i, i === currentPage));
+        }
+
+        paginationEl.appendChild(createPageItem('&raquo;', currentPage + 1, false, currentPage === totalPages || totalPages === 0));
+    };
+
+    const populateFilters = () => {
+        const courtsSelect = document.getElementById('court');
+        const filterCourtsSelect = document.getElementById('filterCourt');
+        const yearsSet = new Set(CASES.map(c => c.year).filter(y => y));
+        const filterYearsSelect = document.getElementById('filterYear');
+        
+        const customCourts = loadCourts();
+        COURTS = [...DEFAULT_COURTS, ...customCourts.filter(c => !DEFAULT_COURTS.includes(c))];
+
+        [courtsSelect, filterCourtsSelect].forEach(select => {
+            const currentValue = select.value;
+            select.innerHTML = select.id === 'court' ? '<option value="">-- Select Court --</option>' : '<option value="">All Courts</option>';
+            COURTS.forEach(court => {
+                if (court && court.trim() !== '') {
+                    const option = document.createElement('option');
+                    option.value = court;
+                    option.textContent = court;
+                    select.appendChild(option);
+                }
+            });
+            select.value = currentValue;
+        });
+
+        const years = Array.from(yearsSet).sort((a, b) => b - a);
+        const currentYearValue = filterYearsSelect.value;
+        filterYearsSelect.innerHTML = '<option value="">All Years</option>';
+        years.forEach(year => {
+            const option = document.createElement('option');
+            option.value = year;
+            option.textContent = year;
+            filterYearsSelect.appendChild(option);
+        });
+        filterYearsSelect.value = currentYearValue;
+
+        const caseTypesFromStorage = loadCaseTypes();
+        CASE_TYPES = [...new Set([...CASE_TYPES, ...caseTypesFromStorage])].sort();
+        const caseTypeSelect = document.getElementById('caseType');
+        const currentCaseType = caseTypeSelect.value;
+        caseTypeSelect.innerHTML = '<option value="">-- Select Case Type --</option>';
+        CASE_TYPES.forEach(type => {
+            const option = document.createElement('option');
+            option.value = type;
+            option.textContent = type;
+            caseTypeSelect.appendChild(option);
+        });
+        caseTypeSelect.value = currentCaseType;
+    };
+
+    const populateCaseSelects = () => {
+        const linkedCaseSelect = document.getElementById('linkedCase');
+        const currentLinkedCase = linkedCaseSelect.value;
+        linkedCaseSelect.innerHTML = '<option value="">-- Select Linked Case --</option>';
+        CASES.forEach(c => {
+            const caseIdentifier = `${c.caseNo}/${c.year} (${c.court})`;
+            const option = document.createElement('option');
+            option.value = caseIdentifier;
+            option.textContent = caseIdentifier;
+            linkedCaseSelect.appendChild(option);
+        });
+        linkedCaseSelect.value = currentLinkedCase;
+    };
+
+    // --- DASHBOARD AND REPORTING ---
+
+    const renderDashboard = () => {
+        const totalCases = CASES.length;
+        const activeCases = CASES.filter(c => c.status === 'Active').length;
+        const today = new Date(new Date().setHours(0, 0, 0, 0));
+        const upcomingHearings = CASES.filter(c => c.nextHearing && new Date(c.nextHearing) >= today).length;
+        const totalTasks = TASKS.length;
+        const activeTasks = TASKS.filter(t => !t.completed).length;
+        const totalReminders = REMINDERS.length;
+        
+        const courts = [...new Set(CASES.map(c => c.court))].filter(c => c);
+        const differentCourts = courts.length;
+
+        document.getElementById('cardTotal').textContent = totalCases;
+        document.getElementById('cardActive').textContent = activeCases;
+        document.getElementById('cardUpcoming').textContent = upcomingHearings;
+        document.getElementById('cardCourts').textContent = differentCourts;
+        document.getElementById('cardTasks').textContent = activeTasks;
+        document.getElementById('cardReminders').textContent = totalReminders;
+        
+        renderCaseTypeDashboardChart();
+        renderUpcomingTasks();
+        
+        if (!dashboardCalendarInstance) {
+          dashboardCalendarInstance = initFullCalendar('dashboardCalendar', getCalendarEvents(), 'dayGridMonth');
+        } else {
+          updateCalendarEvents();
+        }
+    };
+    
+    const renderCaseTypeDashboardChart = () => {
+        const typeCounts = CASES.reduce((acc, c) => {
+            acc[c.caseType] = (acc[c.caseType] || 0) + 1;
+            return acc;
+        }, {});
+
+        const labels = Object.keys(typeCounts).filter(l => l);
+        const data = labels.map(label => typeCounts[label]);
+        const colors = labels.map((_, i) => `hsl(${(i * 45) % 360}, 70%, 50%)`);
+
+        if (caseTypeDashboardChartInstance) {
+            caseTypeDashboardChartInstance.destroy();
+        }
+        
+        const ctx = document.getElementById('caseTypeDashboardChart').getContext('2d');
+        caseTypeDashboardChartInstance = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: colors,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                    },
+                    title: {
+                        display: false,
+                    }
+                }
+            }
+        });
+    };
+
+    const renderChart = (canvasId, labels, data, title, type = 'bar', instance) => {
+        let chartInstance = instance;
+        if (chartInstance) {
+            chartInstance.destroy();
+        }
+        
+        const colors = type === 'pie' 
+            ? labels.map((_, i) => `hsl(${(i * 60) % 360}, 80%, 60%)`)
+            : ['rgba(79, 70, 229, 0.8)', 'rgba(16, 185, 129, 0.8)', 'rgba(245, 158, 11, 0.8)', 'rgba(239, 68, 68, 0.8)', 'rgba(139, 92, 246, 0.8)'];
+        
+        const borderColors = type === 'bar' 
+            ? ['rgba(79, 70, 229, 1)', 'rgba(16, 185, 129, 1)', 'rgba(245, 158, 11, 1)', 'rgba(239, 68, 68, 1)', 'rgba(139, 92, 246, 1)'] 
+            : undefined;
+
+        const ctx = document.getElementById(canvasId).getContext('2d');
+        const chartOptions = {
+            type: type,
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: title,
+                    data: data,
+                    backgroundColor: colors,
+                    borderColor: borderColors,
+                    borderWidth: type === 'bar' ? 2 : undefined
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        display: type === 'bar',
+                    },
+                    x: {
+                        display: type === 'bar',
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: type === 'pie' || false,
+                        position: type === 'pie' ? 'right' : 'top'
+                    },
+                    title: {
+                        display: true,
+                        text: title,
+                        font: {
+                            size: 16,
+                            weight: 'bold'
+                        }
+                    }
+                }
+            }
+        };
+
+        if (canvasId === 'statusChart') {
+            statusChartInstance = new Chart(ctx, chartOptions);
+        } else if (canvasId === 'yearChart') {
+            yearChartInstance = new Chart(ctx, chartOptions);
+        } else if (canvasId === 'courtChart') {
+            courtChartInstance = new Chart(ctx, chartOptions);
+        } else if (canvasId === 'caseTypeReportChart') {
+            caseTypeReportChartInstance = new Chart(ctx, chartOptions);
+        }
+    };
+
+    const renderReports = () => {
+        const statusCounts = CASES.reduce((acc, c) => {
+            acc[c.status] = (acc[c.status] || 0) + 1;
+            return acc;
+        }, {});
+        renderChart('statusChart', Object.keys(statusCounts), Object.values(statusCounts), 'Cases by Status', 'bar', statusChartInstance); 
+
+        const yearCounts = CASES.reduce((acc, c) => {
+            acc[c.year] = (acc[c.year] || 0) + 1;
+            return acc;
+        }, {});
+        const sortedYears = Object.keys(yearCounts).sort();
+        const yearData = sortedYears.map(year => yearCounts[year]);
+        renderChart('yearChart', sortedYears, yearData, 'Cases by Year', 'bar', yearChartInstance);
+
+        const courtCounts = CASES.reduce((acc, c) => {
+            acc[c.court] = (acc[c.court] || 0) + 1;
+            return acc;
+        }, {});
+        const courtLabels = Object.keys(courtCounts).filter(l => l);
+        const courtData = courtLabels.map(label => courtCounts[label]);
+        renderChart('courtChart', courtLabels, courtData, 'Cases by Court', 'pie', courtChartInstance);
+
+        const typeCounts = CASES.reduce((acc, c) => {
+            acc[c.caseType] = (acc[c.caseType] || 0) + 1;
+            return acc;
+        }, {});
+        const typeLabels = Object.keys(typeCounts).filter(l => l);
+        const typeData = typeLabels.map(label => typeCounts[label]);
+        renderChart('caseTypeReportChart', typeLabels, typeData, 'Cases by Case Type', 'pie', caseTypeReportChartInstance);
+    };
+
+    // --- CALENDAR LOGIC ---
+
+    const initFullCalendar = (elementId, events, initialView = 'dayGridMonth') => {
+        const calendarEl = document.getElementById(elementId);
+        if (!calendarEl) return null;
+        
+        const calendarOptions = {
+            initialView: initialView,
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            events: events,
+            editable: true,
+            dayMaxEvents: true, 
+            timeZone: TIME_ZONE,
+            eventDidMount: function(info) {
+            },
+            dateClick: function(info) {
+              if (elementId === 'bigCalendar') {
+                showDayEvents(info.dateStr);
+              }
+            },
+            eventClick: function(info) {
+                if (info.event.extendedProps.type === 'case') {
+                    showCaseDetails(info.event.extendedProps.caseId);
+                } else if (info.event.extendedProps.type === 'task') {
+                    showTaskDetails(info.event.extendedProps.taskId);
+                }
+            }
+        };
+        
+        const calendar = new FullCalendar.Calendar(calendarEl, calendarOptions);
+        calendar.render();
+        return calendar;
+    };
+
+    const getCalendarEvents = () => {
+      const caseEvents = CASES.map(c => ({
+          id: c.id,
+          title: `${c.caseNo}/${c.year} - ${c.parties}`,
+          start: c.nextHearing,
+          color: c.status === 'Active' ? '#4f46e5' : '#10b981', 
+          extendedProps: { caseId: c.id, type: 'case' }
+      })).filter(e => e.start);
+
+      const taskEvents = TASKS.map(t => ({
+          id: `t-${t.id}`,
+          title: `Task: ${t.note.substring(0, 30)}...`,
+          start: t.date,
+          allDay: true,
+          color: t.priority === 'High' ? '#dc3545' : t.priority === 'Medium' ? '#fd7e14' : '#20c997',
+          extendedProps: { taskId: t.id, type: 'task' }
+      })).filter(e => !e.completed);
+
+      const reminderEvents = REMINDERS.map(r => ({
+          id: `r-${r.id}`,
+          title: `Reminder: ${r.note.substring(0, 30)}...`,
+          start: r.date,
+          allDay: true,
+          color: '#f97316', 
+          extendedProps: { reminderId: r.id, type: 'reminder' }
+      }));
+
+      return [...caseEvents, ...taskEvents, ...reminderEvents];
+    };
+    
+    const updateCalendarEvents = () => {
+      const allEvents = getCalendarEvents();
+      if (bigCalendarInstance) {
+          bigCalendarInstance.setOption('events', allEvents);
+          bigCalendarInstance.refetchEvents();
+      }
+      if (dashboardCalendarInstance) {
+          dashboardCalendarInstance.setOption('events', allEvents);
+          dashboardCalendarInstance.refetchEvents();
+      }
+      if (remindersCalendarInstance) {
+          const reminderEvents = REMINDERS.map(r => ({
+              id: r.id,
+              title: r.note,
+              start: r.date,
+              allDay: true,
+              color: '#f97316',
+              extendedProps: { reminderId: r.id, type: 'reminder' }
+          }));
+          remindersCalendarInstance.setOption('events', reminderEvents);
+          remindersCalendarInstance.refetchEvents();
+      }
+    };
+
+    const showDayEvents = (dateStr) => {
+        const events = getCalendarEvents().filter(e => e.start.startsWith(dateStr));
+        const modalList = document.getElementById('dayEventsModalList');
+        const modalTitle = document.getElementById('dayEventsModalLabel');
+        modalTitle.textContent = `Events for ${formatDate(dateStr)}`;
+        modalList.innerHTML = '';
+
+        if (events.length === 0) {
+            modalList.innerHTML = '<li class="list-group-item">No events on this day.</li>';
+        } else {
+            events.forEach(event => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item';
+                li.style.borderColor = event.color;
+                li.style.borderLeft = `5px solid ${event.color}`;
+                li.textContent = event.title;
+                if (event.extendedProps.type === 'case') {
+                    li.onclick = () => { showCaseDetails(event.extendedProps.caseId); bootstrap.Modal.getInstance(document.getElementById('dayEventsModal')).hide(); };
+                } else if (event.extendedProps.type === 'task') {
+                    li.onclick = () => { showTaskDetails(event.extendedProps.taskId); bootstrap.Modal.getInstance(document.getElementById('dayEventsModal')).hide(); };
+                }
+                modalList.appendChild(li);
+            });
+        }
+        new bootstrap.Modal(document.getElementById('dayEventsModal')).show();
+    };
+
+    // --- TASK/REMINDER LOGIC ---
+    
+    const renderTasksTable = () => {
+      const tableBody = document.getElementById('tasksTableBody') || document.getElementById('tasksBody');
+      if (!tableBody) return;
+
+      const sortedTasks = [...TASKS].sort((a, b) => new Date(a.date) - new Date(b.date));
+      
+      tableBody.innerHTML = sortedTasks.map((task, index) => {
+        const priorityClass = task.priority ? `task-priority-${task.priority.toLowerCase()}` : '';
+        const completedClass = task.completed ? 'task-completed text-muted' : '';
+        const isPast = new Date(task.date) < new Date(new Date().setHours(0, 0, 0, 0)) && !task.completed;
+        const rowClass = isPast ? 'table-danger' : '';
+
+        return `
+          <tr class="task-row ${priorityClass} ${rowClass}">
+            <td>${index + 1}.</td>
+            <td class="${completedClass}">${formatDate(task.date)}</td>
+            <td class="${completedClass}">${task.note}</td>
+            <td>${getPriorityBadge(task.priority)}</td>
+            <td>
+              <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-outline-info" onclick="showTaskDetails(${task.id})"><i class="fas fa-eye"></i></button>
+                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#taskModal" data-task-id="${task.id}" onclick="editTask(${task.id})"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-sm btn-outline-secondary" onclick="toggleTaskCompletion(${task.id})" title="${task.completed ? 'Mark Incomplete' : 'Mark Complete'}"><i class="fas fa-check ${task.completed ? 'text-success' : 'text-secondary'}"></i></button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+      
+      document.getElementById('cardTasks').textContent = TASKS.filter(t => !t.completed).length; 
+    };
+
+    window.editTask = (id) => {
+        const task = TASKS.find(t => t.id == id);
+        if (task) {
+            document.getElementById('taskId').value = task.id;
+            document.getElementById('taskDate').value = task.date;
+            document.getElementById('taskNote').value = task.note;
+            document.getElementById('taskPriority').value = task.priority;
+            document.getElementById('taskModalLabel').textContent = 'Edit Task';
+            document.getElementById('btnDeleteTask').style.display = 'inline-block';
+            document.getElementById('btnSaveTask').textContent = 'Update Task';
+        }
+    };
+
+    window.toggleTaskCompletion = (id) => {
+        const taskIndex = TASKS.findIndex(t => t.id == id);
+        if (taskIndex !== -1) {
+            TASKS[taskIndex].completed = !TASKS[taskIndex].completed;
+            saveTasks(TASKS);
+            renderTasksTable();
+            renderDashboard();
+            updateCalendarEvents();
+        }
+    };
+
+    window.deleteTask = () => {
+        const taskId = document.getElementById('taskId').value;
+        if (confirm('Are you sure you want to delete this task?')) {
+            TASKS = TASKS.filter(t => t.id != taskId);
+            saveTasks(TASKS);
+            renderTasksTable();
+            renderDashboard();
+            updateCalendarEvents();
+            bootstrap.Modal.getInstance(document.getElementById('taskModal')).hide();
+        }
+    };
+
+    const renderRemindersTable = () => {
+        const tableBody = document.getElementById('remindersTableBody');
+        if (!tableBody) return;
+
+        const sortedReminders = [...REMINDERS].sort((a, b) => new Date(a.date) - new Date(b.date));
+        
+        tableBody.innerHTML = sortedReminders.map((reminder, index) => {
+            const isPast = new Date(reminder.date) < new Date(new Date().setHours(0, 0, 0, 0));
+            const rowClass = isPast ? 'table-warning' : '';
+
+            return `
+                <tr class="${rowClass}">
+                    <td>${index + 1}.</td>
+                    <td>${formatDate(reminder.date)}</td>
+                    <td>${reminder.note}</td>
+                    <td>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#reminderModal" data-reminder-id="${reminder.id}" onclick="editReminder(${reminder.id})"><i class="fas fa-edit"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    };
+
+    const renderRemindersPage = () => {
+        renderRemindersTable();
+        
+        if (remindersCalendarInstance) {
+          updateCalendarEvents();
+        } else {
+          remindersCalendarInstance = initFullCalendar('remindersCalendar', REMINDERS.map(r => ({
+              id: r.id,
+              title: r.note,
+              start: r.date,
+              allDay: true,
+              color: '#f97316',
+              extendedProps: { reminderId: r.id, type: 'reminder' }
+          })));
+        }
+        
+        if (remindersCalendarInstance) {
+             setTimeout(() => remindersCalendarInstance.render(), 100); 
+        }
+    };
+
+    window.editReminder = (id) => {
+        const reminder = REMINDERS.find(r => r.id == id);
+        if (reminder) {
+            document.getElementById('reminderId').value = reminder.id;
+            document.getElementById('reminderDate').value = reminder.date;
+            document.getElementById('reminderNote').value = reminder.note;
+            document.getElementById('reminderModalLabel').textContent = 'Edit Reminder';
+            document.getElementById('btnDeleteReminder').style.display = 'inline-block';
+            document.getElementById('btnSaveReminder').textContent = 'Update Reminder';
+        }
+    };
+
+    window.deleteReminder = () => {
+        const reminderId = document.getElementById('reminderId').value;
+        if (confirm('Are you sure you want to delete this reminder?')) {
+            REMINDERS = REMINDERS.filter(r => r.id != reminderId);
+            saveReminders(REMINDERS);
+            renderRemindersPage();
+            renderDashboard();
+            updateCalendarEvents();
+            bootstrap.Modal.getInstance(document.getElementById('reminderModal')).hide();
+        }
+    };
+
+    const renderUpcomingTasks = () => {
+        const tasksBody = document.getElementById('tasksBody');
+        if (!tasksBody) return;
+        
+        const upcomingTasks = [...TASKS]
+            .filter(t => !t.completed)
+            .sort((a, b) => new Date(a.date) - new Date(b.date))
+            .slice(0, 5); 
+
+        tasksBody.innerHTML = upcomingTasks.map((task, index) => {
+            const priorityClass = task.priority ? `task-priority-${task.priority.toLowerCase()}` : '';
+            const isPast = new Date(task.date) < new Date(new Date().setHours(0, 0, 0, 0));
+            const rowClass = isPast ? 'table-danger' : '';
+
+            return `
+                <tr class="task-row ${priorityClass} ${rowClass}">
+                    <td>${index + 1}.</td>
+                    <td>${formatDate(task.date)}</td>
+                    <td>${task.note}</td>
+                    <td>${getPriorityBadge(task.priority)}</td>
+                    <td>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-sm btn-outline-info" onclick="showTaskDetails(${task.id})"><i class="fas fa-eye"></i></button>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="toggleTaskCompletion(${task.id})" title="Mark Complete"><i class="fas fa-check"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    };
+
+    window.showTaskDetails = (id) => {
+        const task = TASKS.find(t => t.id === id);
+        if (task) {
+            document.getElementById('taskDetailDate').textContent = formatDate(task.date);
+            document.getElementById('taskDetailNote').textContent = task.note;
+            document.getElementById('taskDetailPriority').innerHTML = getPriorityBadge(task.priority);
+            new bootstrap.Modal(document.getElementById('taskDetailModal')).show();
+        }
+    };
+
+    // --- CASE DISPLAY MODALS ---
+    window.showCaseDetails = (id) => {
+        const c = CASES.find(c => c.id === id);
+        if (!c) return;
+
+        currentCaseForPrint = c;
+
+        document.getElementById('modalCaseTitle').textContent = `${c.caseNo}/${c.year} - ${c.parties}`;
+        document.getElementById('modalCourt').textContent = c.court;
+        document.getElementById('modalCaseType').textContent = c.caseType;
+        document.getElementById('modalParties').textContent = c.parties;
+        document.getElementById('modalClientType').textContent = c.clientType || 'N/A';
+        document.getElementById('modalStatus').textContent = c.status;
+        document.getElementById('modalNextHearing').textContent = formatDate(c.nextHearing);
+        document.getElementById('modalFilingDate').textContent = formatDate(c.filingDate);
+        document.getElementById('modalContact').textContent = c.contact || 'N/A';
+        document.getElementById('modalCNR').textContent = c.cnr || 'N/A';
+        document.getElementById('modalInjunction').textContent = c.injunction;
+        document.getElementById('modalPriority').textContent = c.priority;
+        document.getElementById('modalMoneyHistory').textContent = c.moneyHistory || 'N/A';
+        document.getElementById('modalAddress').textContent = c.address || 'N/A';
+        document.getElementById('modalLinkedCase').textContent = c.linkedCase || 'None';
+        document.getElementById('modalSpecialJudgement').textContent = c.specialJudgement || 'N/A';
+        document.getElementById('modalDetails').textContent = c.details || 'N/A';
+
+        setModalImage('modalPhoto', c.photo);
+        setModalImage('modalSignature', c.signature);
+        renderModalQr(`Case ID: ${c.id}, Case No: ${c.caseNo}/${c.year}`);
+
+        new bootstrap.Modal(document.getElementById('caseDetailModal')).show();
+    };
+    
+    window.showPreviewModal = () => {
+        const c = {
+            caseNo: document.getElementById('caseNo').value,
+            year: document.getElementById('year').value,
+            court: document.getElementById('court').value,
+            caseType: document.getElementById('caseType').value,
+            parties: document.getElementById('parties').value,
+            clientType: document.getElementById('clientType').value,
+            contact: document.getElementById('contact').value,
+            injunction: document.getElementById('injunction').value,
+            priority: document.getElementById('priority').value,
+            cnr: document.getElementById('cnr').value,
+            filingDate: document.getElementById('filingDate').value,
+            nextHearing: document.getElementById('nextHearing').value,
+            address: document.getElementById('address').value,
+            moneyHistory: document.getElementById('moneyHistory').value,
+            linkedCase: document.getElementById('linkedCase').value,
+            specialJudgement: document.getElementById('specialJudgement').value,
+            details: document.getElementById('details').value,
+            photo: document.getElementById('photoPreview').dataset.fileData,
+            signature: document.getElementById('signaturePreview').dataset.fileData
+        };
+
+        document.getElementById('previewCaseNo').textContent = c.caseNo;
+        document.getElementById('previewYear').textContent = c.year;
+        document.getElementById('previewCourt').textContent = c.court;
+        document.getElementById('previewCaseType').textContent = c.caseType;
+        document.getElementById('previewParties').textContent = c.parties;
+        document.getElementById('previewClientType').textContent = c.clientType;
+        document.getElementById('previewContact').textContent = c.contact;
+        document.getElementById('previewInjunction').textContent = c.injunction;
+        document.getElementById('previewPriority').textContent = c.priority;
+        document.getElementById('previewCNR').textContent = c.cnr;
+        document.getElementById('previewFilingDate').textContent = formatDate(c.filingDate);
+        document.getElementById('previewNextHearing').textContent = formatDate(c.nextHearing);
+        document.getElementById('previewAddress').textContent = c.address;
+        document.getElementById('previewMoneyHistory').textContent = c.moneyHistory;
+        document.getElementById('previewLinkedCase').textContent = c.linkedCase;
+        document.getElementById('previewSpecialJudgement').textContent = c.specialJudgement;
+        document.getElementById('previewDetails').textContent = c.details;
+
+        setModalImage('previewPhoto', c.photo);
+        setModalImage('previewSignature', c.signature);
+
+        new bootstrap.Modal(document.getElementById('previewModal')).show();
+    };
+
+    const setModalImage = (elementId, base64Data) => {
+        const el = document.getElementById(elementId);
+        el.innerHTML = base64Data ? `<img src="${base64Data}" alt="Content" />` : 'N/A';
+    };
+
+    const renderModalQr = (text) => {
+        const element = document.getElementById('modalQrCode');
+        element.innerHTML = '';
+        new QRCode(element, { text, width: 120, height: 120, colorDark: "#000000", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H });
+    };
+
+    // --- UPCOMING CASES ---
+    const renderUpcomingCases = () => {
+        const range = parseInt(document.getElementById('upcomingRange').value);
+        const today = new Date(new Date().setHours(0, 0, 0, 0));
+        const futureDate = new Date(today);
+        futureDate.setDate(today.getDate() + range);
+
+        const upcoming = CASES
+            .filter(c => c.nextHearing)
+            .filter(c => {
+                const hearingDate = new Date(c.nextHearing);
+                return hearingDate >= today && hearingDate <= futureDate;
+            })
+            .sort((a, b) => new Date(a.nextHearing) - new Date(b.nextHearing));
+
+        const body = document.getElementById('upcomingBody');
+        body.innerHTML = upcoming.map(c => `
+            <tr>
+                <td>${c.caseNo}</td>
+                <td>${c.year}</td>
+                <td>${c.court}</td>
+                <td>${c.parties}</td>
+                <td>${formatDate(c.nextHearing)}</td>
+                <td>${c.contact || 'N/A'}</td>
+                <td>${c.injunction}</td>
+                <td><button class="btn btn-sm btn-outline-info" onclick="showCaseDetails(${c.id})"><i class="fas fa-eye"></i></button></td>
+            </tr>
+        `).join('');
+    };
+
+    // --- PRINT AND PDF FUNCTIONS ---
+    const printCaseDetails = () => {
+        if (!currentCaseForPrint) return;
+        
+        const printContainer = document.getElementById('casePrintContainer');
+        const caseData = currentCaseForPrint;
+        
+        const printHTML = `
+            <div class="case-print-layout">
+                <div class="case-print-header">
+                    <h2>Case Details</h2>
+                    <h3>${caseData.caseNo}/${caseData.year} - ${caseData.parties}</h3>
+                    <p>Generated on: ${new Date().toLocaleDateString()}</p>
+                </div>
+                
+                <div class="case-print-section">
+                    <h4>Case Information</h4>
+                    <div class="case-print-grid">
+                        <div class="case-print-field">
+                            <div class="case-print-label">Court</div>
+                            <div class="case-print-value">${caseData.court}</div>
+                        </div>
+                        <div class="case-print-field">
+                            <div class="case-print-label">Case Type</div>
+                            <div class="case-print-value">${caseData.caseType}</div>
+                        </div>
+                        <div class="case-print-field">
+                            <div class="case-print-label">Case No</div>
+                            <div class="case-print-value">${caseData.caseNo}</div>
+                        </div>
+                        <div class="case-print-field">
+                            <div class="case-print-label">Year</div>
+                            <div class="case-print-value">${caseData.year}</div>
+                        </div>
+                        <div class="case-print-field case-print-full-width">
+                            <div class="case-print-label">Parties</div>
+                            <div class="case-print-value">${caseData.parties}</div>
+                        </div>
+                        <div class="case-print-field">
+                            <div class="case-print-label">My Client</div>
+                            <div class="case-print-value">${caseData.clientType || 'N/A'}</div>
+                        </div>
+                        <div class="case-print-field">
+                            <div class="case-print-label">Status</div>
+                            <div class="case-print-value">${caseData.status}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="case-print-section">
+                    <h4>Dates</h4>
+                    <div class="case-print-grid">
+                        <div class="case-print-field">
+                            <div class="case-print-label">Filing Date</div>
+                            <div class="case-print-value">${formatDate(caseData.filingDate)}</div>
+                        </div>
+                        <div class="case-print-field">
+                            <div class="case-print-label">Next Hearing</div>
+                            <div class="case-print-value">${formatDate(caseData.nextHearing)}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="case-print-section">
+                    <h4>Additional Information</h4>
+                    <div class="case-print-grid">
+                        <div class="case-print-field">
+                            <div class="case-print-label">Contact No</div>
+                            <div class="case-print-value">${caseData.contact || 'N/A'}</div>
+                        </div>
+                        <div class="case-print-field">
+                            <div class="case-print-label">CNR No</div>
+                            <div class="case-print-value">${caseData.cnr || 'N/A'}</div>
+                        </div>
+                        <div class="case-print-field">
+                            <div class="case-print-label">Injunction</div>
+                            <div class="case-print-value">${caseData.injunction}</div>
+                        </div>
+                        <div class="case-print-field">
+                            <div class="case-print-label">Priority</div>
+                            <div class="case-print-value">${caseData.priority}</div>
+                        </div>
+                        <div class="case-print-field case-print-full-width">
+                            <div class="case-print-label">Address</div>
+                            <div class="case-print-value">${caseData.address || 'N/A'}</div>
+                        </div>
+                        <div class="case-print-field case-print-full-width">
+                            <div class="case-print-label">Money History</div>
+                            <div class="case-print-value">${caseData.moneyHistory || 'N/A'}</div>
+                        </div>
+                        <div class="case-print-field case-print-full-width">
+                            <div class="case-print-label">Linked Case</div>
+                            <div class="case-print-value">${caseData.linkedCase || 'None'}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="case-print-section">
+                    <h4>Judgement & Notes</h4>
+                    <div class="case-print-grid">
+                        <div class="case-print-field case-print-full-width">
+                            <div class="case-print-label">Special Judgement</div>
+                            <div class="case-print-value">${caseData.specialJudgement || 'N/A'}</div>
+                        </div>
+                        <div class="case-print-field case-print-full-width">
+                            <div class="case-print-label">Details / Notes</div>
+                            <div class="case-print-value">${caseData.details || 'N/A'}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="case-print-section">
+                    <h4>Images</h4>
+                    <div class="case-print-images">
+                        <div class="case-print-image-container">
+                            <div class="case-print-label">Client Photo</div>
+                            ${caseData.photo ? `<img src="${caseData.photo}" class="case-print-image" />` : '<p>No photo available</p>'}
+                        </div>
+                        <div class="case-print-image-container">
+                            <div class="case-print-label">Client Signature</div>
+                            ${caseData.signature ? `<img src="${caseData.signature}" class="case-print-image" />` : '<p>No signature available</p>'}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        printContainer.innerHTML = printHTML;
+        
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(`
+            <html>
+                <head>
+                    <title>Case Details - ${caseData.caseNo}/${caseData.year}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; color: #333; }
+                        .case-print-layout { width: 210mm; min-height: 297mm; padding: 15mm; margin: 0 auto; background: white; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+                        .case-print-header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #4f46e5; padding-bottom: 15px; }
+                        .case-print-section { margin-bottom: 20px; page-break-inside: avoid; }
+                        .case-print-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+                        .case-print-field { margin-bottom: 10px; }
+                        .case-print-label { font-weight: 600; color: #4b5563; margin-bottom: 5px; }
+                        .case-print-value { padding: 8px; background: #f9fafb; border-radius: 4px; border-left: 3px solid #4f46e5; }
+                        .case-print-full-width { grid-column: 1 / -1; }
+                        .case-print-images { display: flex; justify-content: space-between; margin-top: 20px; }
+                        .case-print-image-container { width: 48%; text-align: center; }
+                        .case-print-image { max-width: 100%; max-height: 150px; border: 1px solid #e5e7eb; border-radius: 4px; padding: 5px; background: white; }
+                        @media print {
+                            body { margin: 0; padding: 0; }
+                            .case-print-layout { width: 100%; min-height: 100%; padding: 0; box-shadow: none; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    ${printHTML}
+                </body>
+            </html>
+        `);
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
+    };
+
+    const generateCasePDF = () => {
+        if (!currentCaseForPrint || !window.jspdf) {
+            alert('PDF library not loaded or no case selected.');
+            return;
+        }
+        
+        const caseData = currentCaseForPrint;
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF('p', 'mm', 'a4');
+        
+        doc.setProperties({
+            title: `Case Details - ${caseData.caseNo}/${caseData.year}`,
+            subject: 'Case Management System',
+            author: 'Case Management System',
+            keywords: 'case, legal, management',
+            creator: 'Case Management System'
+        });
+        
+        doc.setFontSize(20);
+        doc.setTextColor(40, 40, 40);
+        doc.text('Case Details', 105, 20, { align: 'center' });
+        
+        doc.setFontSize(16);
+        doc.text(`${caseData.caseNo}/${caseData.year} - ${caseData.parties}`, 105, 30, { align: 'center' });
+        
+        doc.setFontSize(10);
+        doc.setTextColor(100, 100, 100);
+        doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 105, 37, { align: 'center' });
+        
+        let yPosition = 50;
+        
+        doc.setFontSize(12);
+        doc.setTextColor(0, 0, 0);
+        doc.setFont(undefined, 'bold');
+        doc.text('Case Information', 20, yPosition);
+        yPosition += 10;
+        
+        doc.setFont(undefined, 'normal');
+        doc.text(`Court: ${caseData.court}`, 20, yPosition);
+        doc.text(`Case Type: ${caseData.caseType}`, 110, yPosition);
+        yPosition += 7;
+        
+        doc.text(`Case No: ${caseData.caseNo}`, 20, yPosition);
+        doc.text(`Year: ${caseData.year}`, 110, yPosition);
+        yPosition += 7;
+        
+        doc.text(`Parties: ${caseData.parties}`, 20, yPosition);
+        yPosition += 7;
+        
+        doc.text(`My Client: ${caseData.clientType || 'N/A'}`, 20, yPosition);
+        doc.text(`Status: ${caseData.status}`, 110, yPosition);
+        yPosition += 12;
+        
+        doc.setFont(undefined, 'bold');
+        doc.text('Dates', 20, yPosition);
+        yPosition += 10;
+        
+        doc.setFont(undefined, 'normal');
+        doc.text(`Filing Date: ${formatDate(caseData.filingDate)}`, 20, yPosition);
+        doc.text(`Next Hearing: ${formatDate(caseData.nextHearing)}`, 110, yPosition);
+        yPosition += 12;
+        
+        doc.setFont(undefined, 'bold');
+        doc.text('Additional Information', 20, yPosition);
+        yPosition += 10;
+        
+        doc.setFont(undefined, 'normal');
+        doc.text(`Contact No: ${caseData.contact || 'N/A'}`, 20, yPosition);
+        doc.text(`CNR No: ${caseData.cnr || 'N/A'}`, 110, yPosition);
+        yPosition += 7;
+        
+        doc.text(`Injunction: ${caseData.injunction}`, 20, yPosition);
+        doc.text(`Priority: ${caseData.priority}`, 110, yPosition);
+        yPosition += 7;
+        
+        doc.text(`Address: ${caseData.address || 'N/A'}`, 20, yPosition);
+        yPosition += 7;
+        
+        if (caseData.moneyHistory) {
+            doc.text(`Money History: ${caseData.moneyHistory}`, 20, yPosition);
+            yPosition += 7;
+        }
+        
+        if (caseData.linkedCase) {
+            doc.text(`Linked Case: ${caseData.linkedCase}`, 20, yPosition);
+            yPosition += 7;
+        }
+        
+        if (caseData.specialJudgement) {
+            doc.setFont(undefined, 'bold');
+            doc.text('Special Judgement', 20, yPosition);
+            yPosition += 7;
+            
+            doc.setFont(undefined, 'normal');
+            const specialJudgementLines = doc.splitTextToSize(caseData.specialJudgement, 170);
+            doc.text(specialJudgementLines, 20, yPosition);
+            yPosition += specialJudgementLines.length * 7;
+        }
+        
+        if (caseData.details) {
+            doc.setFont(undefined, 'bold');
+            doc.text('Details / Notes', 20, yPosition);
+            yPosition += 7;
+            
+            doc.setFont(undefined, 'normal');
+            const detailsLines = doc.splitTextToSize(caseData.details, 170);
+            doc.text(detailsLines, 20, yPosition);
+            yPosition += detailsLines.length * 7;
+        }
+        
+        if (caseData.photo || caseData.signature) {
+            yPosition += 10;
+            doc.setFont(undefined, 'bold');
+            doc.text('Images', 20, yPosition);
+            yPosition += 10;
+            
+            let imageX = 20;
+            
+            if (caseData.photo) {
+                try {
+                    doc.addImage(caseData.photo, 'JPEG', imageX, yPosition, 80, 60);
+                    doc.setFontSize(8);
+                    doc.text('Client Photo', imageX + 40, yPosition + 65, { align: 'center' });
+                    imageX += 90;
+                } catch (e) {
+                    console.error('Error adding photo to PDF:', e);
+                }
+            }
+            
+            if (caseData.signature) {
+                try {
+                    doc.addImage(caseData.signature, 'JPEG', imageX, yPosition, 80, 60);
+                    doc.setFontSize(8);
+                    doc.text('Client Signature', imageX + 40, yPosition + 65, { align: 'center' });
+                } catch (e) {
+                    console.error('Error adding signature to PDF:', e);
+                }
+            }
+        }
+        
+        doc.save(`case_${caseData.caseNo}_${caseData.year}.pdf`);
+    };
+
+    // --- INITIALISATION AND EVENT LISTENERS ---
+
+    const initEventListeners = () => {
+      document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const target = this.getAttribute('data-target');
+          
+          document.querySelectorAll('.sidebar .nav-link').forEach(l => l.classList.remove('active'));
+          this.classList.add('active');
+          
+          Object.keys(SECTIONS).forEach(key => {
+            SECTIONS[key].style.display = key === target ? 'block' : 'none';
+          });
+
+          document.querySelector('h2.main-title').textContent = this.textContent.trim();
+          
+          if (target === 'dashboard') {
+             renderDashboard();
+             if (dashboardCalendarInstance) {
+                setTimeout(() => dashboardCalendarInstance.render(), 100); 
+             }
+          }
+
+          if (target === 'calendar') {
+             if (!bigCalendarInstance) {
+                bigCalendarInstance = initFullCalendar('bigCalendar', getCalendarEvents());
+             } else {
+                bigCalendarInstance.render();
+             }
+          }
+
+          if (target === 'reports') {
+            renderReports();
+          }
+          if (target === 'cases') {
+            applyFilters();
+          }
+          if (target === 'tasks') {
+            renderTasksTable();
+          }
+          if (target === 'reminders') {
+            renderRemindersPage();
+          }
+          if (target === 'whatwork') {
+            renderWhatworkTable(1);
+          }
+          if (target === 'transactions') {
+            renderTransactionsTable(1);
+          }
+          if (target === 'upcoming') {
+            renderUpcomingCases();
+          }
+        });
+      });
+      
+      document.getElementById('caseForm').addEventListener('submit', handleCaseFormSubmit);
+      document.getElementById('clearBtn').addEventListener('click', clearCaseForm);
+      document.getElementById('previewBtn').addEventListener('click', showPreviewModal);
+      
+      document.getElementById('caseNo').addEventListener('input', () => generateQrCode(getCurrentCaseNumber(), 'inlineQr'));
+      document.getElementById('year').addEventListener('input', () => generateQrCode(getCurrentCaseNumber(), 'inlineQr'));
+      
+      setupFileReaders();
+
+      document.getElementById('filterCourt').addEventListener('change', () => applyFilters(1));
+      document.getElementById('filterYear').addEventListener('change', () => applyFilters(1));
+      document.getElementById('filterStatus').addEventListener('change', () => applyFilters(1));
+      document.getElementById('btnSearch').addEventListener('click', () => applyFilters(1));
+      document.getElementById('searchInput').addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') applyFilters(1);
+      });
+
+      document.getElementById('upcomingRange').addEventListener('change', renderUpcomingCases);
+      document.getElementById('btnPrintUpcoming').addEventListener('click', () => {
+        window.print();
+      });
+      
+      // UPDATED PDF EXPORT FOR UPCOMING CASES
+      document.getElementById('exportUpcomingPDF').addEventListener('click', () => {
+          if (!window.jspdf) {
+              alert('PDF library not loaded. Check your internet connection or CDN availability.');
+              return;
+          }
+          
+          try {
+              const { jsPDF } = window.jspdf;
+              const doc = new jsPDF('p', 'pt', 'a4');
+              
+              // Get the upcoming cases (same logic as renderUpcomingCases)
+              const range = parseInt(document.getElementById('upcomingRange').value);
+              const today = new Date(new Date().setHours(0, 0, 0, 0));
+              const futureDate = new Date(today);
+              futureDate.setDate(today.getDate() + range);
+
+              const upcoming = CASES
+                  .filter(c => c.nextHearing)
+                  .filter(c => {
+                      const hearingDate = new Date(c.nextHearing);
+                      return hearingDate >= today && hearingDate <= futureDate;
+                  })
+                  .sort((a, b) => new Date(a.nextHearing) - new Date(b.nextHearing));
+
+              // Set title
+              doc.setFontSize(16);
+              doc.setTextColor(40, 40, 40);
+              doc.text('Upcoming Cases', 40, 40);
+              
+              doc.setFontSize(10);
+              doc.setTextColor(100, 100, 100);
+              doc.text(`Generated on: ${new Date().toLocaleDateString()} | Range: ${document.getElementById('upcomingRange').options[document.getElementById('upcomingRange').selectedIndex].text}`, 40, 60);
+              
+              // Prepare data for the table in the specified order
+              const tableData = upcoming.map(c => [
+                  c.court || 'N/A',                    // COURT NAME
+                  c.caseType || 'N/A',                 // CASE TYPE
+                  c.caseNo || 'N/A',                   // CASE NO.
+                  c.year || 'N/A',                     // YEAR
+                  c.parties || 'N/A',                  // PARTIES
+                  formatDate(c.nextHearing) || 'N/A',  // DATE (formatted)
+                  c.contact || 'N/A',                  // CONTACT NO
+                  c.injunction || 'N/A'                // INJUNCTION
+              ]);
+
+              // Define table headers in the specified order
+              const headers = [
+                  'COURT NAME',
+                  'CASE TYPE', 
+                  'CASE NO.',
+                  'YEAR',
+                  'PARTIES',
+                  'DATE',
+                  'CONTACT NO',
+                  'INJUNCTION'
+              ];
+
+              // Create the table
+              doc.autoTable({
+                  head: [headers],
+                  body: tableData,
+                  startY: 80,
+                  theme: 'grid',
+                  headStyles: { 
+                      fillColor: [79, 70, 229],
+                      textColor: 255,
+                      fontStyle: 'bold'
+                  },
+                  styles: {
+                      fontSize: 8,
+                      cellPadding: 3,
+                      overflow: 'linebreak'
+                  },
+                  columnStyles: {
+                      0: { cellWidth: 'auto' }, // COURT NAME
+                      1: { cellWidth: 'auto' }, // CASE TYPE
+                      2: { cellWidth: 'auto' }, // CASE NO
+                      3: { cellWidth: 'auto' }, // YEAR
+                      4: { cellWidth: 'auto' }, // PARTIES
+                      5: { cellWidth: 'auto' }, // DATE
+                      6: { cellWidth: 'auto' }, // CONTACT NO
+                      7: { cellWidth: 'auto' }  // INJUNCTION
+                  },
+                  margin: { top: 80 }
+              });
+
+              // Add footer with total count
+              const finalY = doc.lastAutoTable.finalY || 100;
+              doc.setFontSize(10);
+              doc.setTextColor(100, 100, 100);
+              doc.text(`Total Cases: ${upcoming.length}`, 40, finalY + 20);
+              
+              doc.save(`upcoming_cases_${new Date().toISOString().slice(0, 10)}.pdf`);
+          } catch (err) {
+              console.error(err);
+              alert('Error generating PDF. See console for details.');
+          }
+      });
+      
+      document.getElementById('btnRefresh').addEventListener('click', () => {
+          CASES = loadCases();
+          TASKS = loadTasks();
+          REMINDERS = loadReminders();
+          populateInitials();
+          renderDashboard();
+          applyFilters(); 
+          renderTasksTable();
+          if (dashboardCalendarInstance) {
+             setTimeout(() => dashboardCalendarInstance.render(), 100); 
+          }
+          alert('Data Refreshed!');
+      });
+
+      document.getElementById('exportCSV').addEventListener('click', exportDataToCSV);
+      document.getElementById('importXLSXInputCase').addEventListener('change', importDataFromXLSX); 
+      
+      document.getElementById('exportAllJson').addEventListener('click', exportAllDataToJSON);
+      document.getElementById('importJsonInput').addEventListener('change', importAllDataFromJSON);
+      document.getElementById('exportXLSXBackup').addEventListener('click', exportDataToXLSX);
+      document.getElementById('importXLSXInputBackup').addEventListener('change', importDataFromXLSX);
+
+      document.getElementById('taskModal').addEventListener('show.bs.modal', function (event) {
+          const button = event.relatedTarget;
+          if (!button || !button.hasAttribute('data-task-id')) {
+              document.getElementById('taskForm').reset();
+              document.getElementById('taskId').value = '';
+              document.getElementById('taskModalLabel').textContent = 'Add New Task';
+              document.getElementById('btnDeleteTask').style.display = 'none';
+              document.getElementById('btnSaveTask').textContent = 'Save Task';
+              document.getElementById('taskPriority').value = 'Medium';
+          }
+      });
+      document.getElementById('taskForm').addEventListener('submit', (e) => {
+          e.preventDefault(); 
+          
+          const taskId = document.getElementById('taskId').value;
+          const date = document.getElementById('taskDate').value;
+          const note = document.getElementById('taskNote').value;
+          const priority = document.getElementById('taskPriority').value;
+
+          if (!date || !note) {
+              alert('Date and Note are required.');
+              return;
+          }
+
+          if (taskId) {
+              const taskIndex = TASKS.findIndex(t => t.id == taskId);
+              if (taskIndex !== -1) {
+                  TASKS[taskIndex] = { ...TASKS[taskIndex], date, note, priority };
+              }
+          } else {
+              const newTask = { id: Date.now(), date, note, priority, completed: false };
+              TASKS.push(newTask);
+          }
+
+          saveTasks(TASKS);
+          renderTasksTable();
+          renderDashboard(); 
+          updateCalendarEvents();
+          bootstrap.Modal.getInstance(document.getElementById('taskModal')).hide();
+      });
+      document.getElementById('btnDeleteTask').addEventListener('click', deleteTask);
+
+      document.getElementById('reminderModal').addEventListener('show.bs.modal', function (event) {
+          const button = event.relatedTarget;
+          if (!button || !button.hasAttribute('data-reminder-id')) {
+              document.getElementById('reminderForm').reset();
+              document.getElementById('reminderId').value = '';
+              document.getElementById('reminderModalLabel').textContent = 'Add New Reminder';
+              document.getElementById('btnDeleteReminder').style.display = 'none';
+              document.getElementById('btnSaveReminder').textContent = 'Save Reminder';
+          }
+      });
+
+      document.getElementById('reminderForm').addEventListener('submit', (e) => {
+          e.preventDefault(); 
+
+          const reminderId = document.getElementById('reminderId').value;
+          const date = document.getElementById('reminderDate').value;
+          const note = document.getElementById('reminderNote').value;
+
+          if (!date || !note) {
+              alert('Date and Note are required.');
+              return;
+          }
+
+          if (reminderId) {
+              const reminderIndex = REMINDERS.findIndex(r => r.id == reminderId);
+              if (reminderIndex !== -1) {
+                  REMINDERS[reminderIndex] = { id: parseInt(reminderId), date, note };
+              }
+          } else {
+              const newReminder = { id: Date.now(), date, note };
+              REMINDERS.push(newReminder);
+          }
+
+          saveReminders(REMINDERS);
+          renderRemindersPage();
+          renderDashboard(); 
+          updateCalendarEvents();
+          bootstrap.Modal.getInstance(document.getElementById('reminderModal')).hide();
+      });
+      document.getElementById('btnDeleteReminder').addEventListener('click', deleteReminder);
+
+      document.getElementById('addCaseTypeBtn').addEventListener('click', () => {
+          const newType = prompt('Enter new Case Type name:');
+          if (newType && newType.trim() !== '') {
+              const trimmedType = newType.trim();
+              if (!CASE_TYPES.includes(trimmedType)) {
+                  CASE_TYPES.push(trimmedType);
+                  saveCaseTypes(CASE_TYPES);
+                  populateFilters();
+                  document.getElementById('caseType').value = trimmedType;
+              } else {
+                  alert('Case type already exists.');
+              }
+          }
+      });
+      
+      document.getElementById('addCourtBtn').addEventListener('click', () => {
+          const newCourt = prompt('Enter new Court/Authority name:');
+          if (newCourt && newCourt.trim() !== '') {
+              const trimmedCourt = newCourt.trim();
+              if (!COURTS.includes(trimmedCourt)) {
+                  COURTS.push(trimmedCourt); 
+                  const customCourtsToSave = COURTS.filter(c => !DEFAULT_COURTS.includes(c));
+                  saveCourts(customCourtsToSave);
+                  populateFilters();
+                  document.getElementById('court').value = trimmedCourt;
+              } else {
+                  alert('Court/Authority already exists.');
+              }
+          }
+      });
+
+      document.getElementById('removeCourtBtn').addEventListener('click', () => {
+          const courtSelect = document.getElementById('court');
+          const selected = courtSelect.value;
+          if (!selected) {
+              alert('Select a court to remove.');
+              return;
+          }
+          if (DEFAULT_COURTS.includes(selected)) {
+              alert('Default courts cannot be removed.');
+              return;
+          }
+          if (confirm(`Remove court "${selected}" ?`)) {
+              COURTS = COURTS.filter(c => c !== selected);
+              saveCourts(COURTS.filter(c => !DEFAULT_COURTS.includes(c)));
+              populateFilters();
+              alert('Court removed successfully!');
+          }
+      });
+
+      document.getElementById('removeCaseTypeBtn').addEventListener('click', () => {
+          const caseTypeSelect = document.getElementById('caseType');
+          const selected = caseTypeSelect.value;
+          if (!selected) {
+              alert('Select a case type to remove.');
+              return;
+          }
+          if (confirm(`Remove case type "${selected}" ?`)) {
+              CASE_TYPES = CASE_TYPES.filter(t => t !== selected);
+              saveCaseTypes(CASE_TYPES);
+              populateFilters();
+              alert('Case Type removed successfully!');
+          }
+      });
+
+      document.getElementById('toggleSidebar').addEventListener('click', () => {
+          document.getElementById('sidebar').classList.toggle('show');
+      });
+
+      document.getElementById('printReportBtn').addEventListener('click', () => {
+          window.print();
+      });
+
+      document.getElementById('exportCasesPDF').addEventListener('click', () => {
+          if (!window.jspdf) {
+              alert('PDF library not loaded. Check your internet connection or CDN availability.');
+              return;
+          }
+          try {
+              const { jsPDF } = window.jspdf;
+              const doc = new jsPDF('p', 'pt', 'a4');
+              doc.setFontSize(14);
+              doc.text('All Cases', 40, 40);
+              doc.autoTable({ html: '#casesTable', startY: 60, theme: 'striped', headStyles: { fillColor: [79,70,229] } });
+              doc.save('all_cases.pdf');
+          } catch (err) {
+              console.error(err);
+              alert('Error generating PDF. See console for details.');
+          }
+      });
+
+      document.getElementById('btnCasePDF').addEventListener('click', generateCasePDF);
+    };
+
+    // --- IMPORT/EXPORT FUNCTIONS ---
+
+    const exportAllDataToJSON = () => {
+        const customCourtsToSave = COURTS.filter(c => !DEFAULT_COURTS.includes(c));
+        
+        const backupData = {
+            cases: CASES,
+            tasks: TASKS,
+            reminders: REMINDERS,
+            caseTypes: CASE_TYPES,
+            courts: customCourtsToSave,
+            timestamp: new Date().toISOString()
+        };
+
+        const jsonString = JSON.stringify(backupData, null, 2);
+        const blob = new Blob([jsonString], { type: 'application/json' });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.setAttribute('download', `case_management_backup_JSON_${new Date().toISOString().slice(0, 10)}.json`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        alert('All data backed up successfully!');
+    };
+
+    const importAllDataFromJSON = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        if (!confirm("WARNING: Are you sure you want to RESTORE this data? This will overwrite ALL existing cases, tasks, reminders, courts, and case types. Proceed with caution.")) {
+            e.target.value = '';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            try {
+                const data = JSON.parse(event.target.result);
+
+                if (data.cases && data.tasks && data.reminders) {
+                    CASES = data.cases;
+                    TASKS = data.tasks;
+                    REMINDERS = data.reminders;
+                    
+                    if (data.caseTypes) {
+                        saveCaseTypes(data.caseTypes);
+                        CASE_TYPES = data.caseTypes;
+                    }
+                    if (data.courts) {
+                        saveCourts(data.courts);
+                    }
+                    
+                    saveCases(CASES);
+                    saveTasks(TASKS);
+                    saveReminders(REMINDERS);
+                    
+                    populateInitials(); 
+                    renderDashboard();
+                    applyFilters();
+                    updateCalendarEvents();
+                    renderTasksTable();
+                    
+                    alert('Data successfully restored!');
+                } else {
+                    alert('Invalid backup file. Missing one or more required data sections (cases, tasks, reminders).');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('Error processing file. Please ensure it is a valid JSON backup file.');
+            } finally {
+                e.target.value = '';
+            }
+        };
+        reader.readAsText(file);
+    };
+
+    const exportDataToCSV = () => {
+        const data = CASES.map(c => ({
+            ID: c.id,
+            'Case No': c.caseNo,
+            Year: c.year,
+            Court: c.court,
+            'Case Type': c.caseType,
+            Parties: c.parties,
+            'Client Type': c.clientType,
+            Contact: c.contact,
+            Injunction: c.injunction,
+            Priority: c.priority,
+            CNR: c.cnr,
+            'Filing Date': c.filingDate,
+            'Next Hearing': c.nextHearing,
+            Address: c.address,
+            'Money History': c.moneyHistory,
+            'Linked Case': c.linkedCase,
+            'Special Judgement': c.specialJudgement,
+            Details: c.details,
+            Status: c.status,
+            'Client Photo (Base64)': c.photo ? 'Data Present' : 'No Data', 
+            'Client Signature (Base64)': c.signature ? 'Data Present' : 'No Data'
+        }));
+
+        if (data.length === 0) {
+            alert("No cases to export.");
+            return;
+        }
+
+        const header = Object.keys(data[0]);
+        let csv = [header.join(',')];
+        data.forEach(row => {
+            const values = header.map(fieldName => {
+                let value = row[fieldName] === null || row[fieldName] === undefined ? '' : row[fieldName];
+                if (typeof value === 'string') {
+                    value = value.replace(/"/g, '""');
+                    if (value.includes(',') || value.includes('\n')) {
+                        value = `"${value}"`;
+                    }
+                }
+                return value;
+            });
+            csv.push(values.join(','));
+        });
+
+        const csvString = csv.join('\n');
+        const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.setAttribute('download', 'case_management_data.csv');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+    
+    window.exportDataToXLSX = () => {
+        if (CASES.length === 0) {
+            alert("No cases to export.");
+            return;
+        }
+
+        const data = CASES.map(c => ({
+            ID: c.id,
+            'Case No': c.caseNo,
+            Year: c.year,
+            Court: c.court,
+            'Case Type': c.caseType,
+            Parties: c.parties,
+            'Client Type': c.clientType,
+            Contact: c.contact,
+            Injunction: c.injunction,
+            Priority: c.priority,
+            CNR: c.cnr,
+            'Filing Date': c.filingDate,
+            'Next Hearing': c.nextHearing,
+            Address: c.address,
+            'Money History': c.moneyHistory,
+            'Linked Case': c.linkedCase,
+            'Special Judgement': c.specialJudgement,
+            Details: c.details,
+            Status: c.status,
+            'Client Photo (Base64)': c.photo ? 'Data Present' : 'No Data', 
+            'Client Signature (Base64)': c.signature ? 'Data Present' : 'No Data'
+        }));
+        
+        const worksheet = XLSX.utils.json_to_sheet(data);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Cases");
+        XLSX.writeFile(workbook, `Case_Management_Cases_Backup_XLSX_${new Date().toISOString().slice(0, 10)}.xlsx`);
+    };
+
+    const importDataFromXLSX = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const isBackupImport = e.currentTarget.id === 'importXLSXInputBackup';
+        if (isBackupImport && !confirm("WARNING: Imported cases will be ADDED to your existing cases list. Do you wish to continue?")) {
+            e.target.value = '';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const data = new Uint8Array(event.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+            const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+            if (json.length < 2) {
+                alert('No data found in the file.');
+                e.target.value = '';
+                return;
+            }
+
+            const headers = json[0].map(h => h.trim());
+            const getCellValue = (row, headerName) => row[headers.indexOf(headerName)] || '';
+            const newCases = [];
+
+            for (let i = 1; i < json.length; i++) {
+                const row = json[i];
+                const newCase = {
+                    id: Date.now() + i,
+                    caseNo: getCellValue(row, 'Case No'),
+                    year: getCellValue(row, 'Year'),
+                    court: getCellValue(row, 'Court'),
+                    caseType: getCellValue(row, 'Case Type'),
+                    parties: getCellValue(row, 'Parties'),
+                    clientType: getCellValue(row, 'Client Type'),
+                    contact: getCellValue(row, 'Contact'),
+                    injunction: getCellValue(row, 'Injunction') || 'No',
+                    priority: getCellValue(row, 'Priority') || 'Medium',
+                    cnr: getCellValue(row, 'CNR'),
+                    filingDate: getCellValue(row, 'Filing Date'),
+                    nextHearing: getCellValue(row, 'Next Hearing'),
+                    address: getCellValue(row, 'Address'),
+                    moneyHistory: getCellValue(row, 'Money History'),
+                    linkedCase: getCellValue(row, 'Linked Case'),
+                    specialJudgement: getCellValue(row, 'Special Judgement'),
+                    details: getCellValue(row, 'Details'),
+                    status: getCellValue(row, 'Status') || 'Active',
+                    photo: '', 
+                    signature: ''
+                };
+                if (newCase.caseNo && newCase.year && newCase.court) {
+                    newCases.push(newCase);
+                }
+            }
+
+            CASES = [...CASES, ...newCases];
+            saveCases(CASES);
+            renderDashboard();
+            applyFilters();
+            populateFilters();
+            populateCaseSelects();
+            alert(`Successfully imported ${newCases.length} new cases!`);
+            e.target.value = '';
+        };
+        reader.readAsArrayBuffer(file);
+    };
+
+    // --- INITIALISATION (FINAL BLOCK) ---
+
+    const populateInitials = () => {
+      CASES = loadCases();
+      TASKS = loadTasks();
+      REMINDERS = loadReminders();
+      
+      const storedCourts = loadCourts();
+      COURTS = [...new Set([...DEFAULT_COURTS, ...storedCourts])].sort();
+
+      const storedTypes = loadCaseTypes();
+      if (storedTypes.length > 0) {
+          CASE_TYPES = storedTypes;
+      }
+
+      populateFilters(); 
+      populateCaseSelects();
+      filteredCases = CASES; 
+      totalPages = Math.ceil(filteredCases.length / ITEMS_PER_PAGE);
+    };
+
+    // Global Initialization
+    document.addEventListener('DOMContentLoaded', function() {
+      populateInitials();
+      renderDashboard();
+      applyFilters(); 
+      initEventListeners();
+    });
+
+    window.addEventListener('storage', (e)=>{ 
+      if(e.key === STORAGE_KEY || e.key === TASKS_STORAGE_KEY || e.key === REMINDERS_STORAGE_KEY || e.key === COURTS_KEY || e.key === CASE_TYPES_KEY){ 
+        populateInitials(); 
+        renderDashboard(); 
+        applyFilters(); 
+        renderTasksTable();
+        if (SECTIONS.reminders.style.display === 'block') {
+          renderRemindersPage();
+        }
+      }
+    });
+  
+// --- Case Type Modal Save ---
+document.getElementById('caseTypeForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const newType = document.getElementById('caseTypeName').value.trim();
+  if (newType && !CASE_TYPES.includes(newType)) {
+    CASE_TYPES.push(newType);
+    saveCaseTypes(CASE_TYPES);
+    populateFilters();
+    document.getElementById('caseType').value = newType;
+  }
+  bootstrap.Modal.getInstance(document.getElementById('caseTypeModal')).hide();
+  e.target.reset();
+});
+
+// --- Court Modal Save ---
+document.getElementById('courtForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const newCourt = document.getElementById('courtName').value.trim();
+  if (newCourt && !COURTS.includes(newCourt)) {
+    COURTS.push(newCourt);
+    saveCourts(COURTS.filter(c => !DEFAULT_COURTS.includes(c)));
+    populateFilters();
+    document.getElementById('court').value = newCourt;
+  }
+  bootstrap.Modal.getInstance(document.getElementById('courtModal')).hide();
+  e.target.reset();
+});
+
+/* ===== NEW: What Work Today & Transactions ===== */
+const WHATWORK_KEY = 'case_management_whatwork';
+const TRANSACTIONS_KEY = 'case_management_transactions';
+
+let WHATWORK = JSON.parse(localStorage.getItem(WHATWORK_KEY) || '[]');
+let TRANSACTIONS = JSON.parse(localStorage.getItem(TRANSACTIONS_KEY) || '[]');
+
+/* Utility to save */
+const saveWhatwork = () => { localStorage.setItem(WHATWORK_KEY, JSON.stringify(WHATWORK)); };
+const saveTransactions = () => { localStorage.setItem(TRANSACTIONS_KEY, JSON.stringify(TRANSACTIONS)); };
+
+/* ---------- PAGINATION HELPERS ---------- */
+function paginate(items, page = 1, perPage = typeof ITEMS_PER_PAGE !== 'undefined' ? ITEMS_PER_PAGE : 10) {
+  const total = items.length;
+  const totalPages = Math.max(1, Math.ceil(total / perPage));
+  const start = (page - 1) * perPage;
+  const end = start + perPage;
+  return {
+    page,
+    perPage,
+    total,
+    totalPages,
+    slice: items.slice(start, end)
+  };
+}
+
+function buildPagination(containerId, page, totalPages, onClickName) {
+  const ul = document.getElementById(containerId);
+  if (!ul) return;
+  ul.innerHTML = '';
+  if (totalPages <= 1) return;
+  const makeLi = (p, txt, disabled) => {
+    return `<li class="page-item ${disabled ? 'disabled' : ''}"><a class="page-link" href="#" data-page="${p}" onclick="${onClickName}(${p});return false;">${txt}</a></li>`;
+  };
+  // Prev
+  ul.insertAdjacentHTML('beforeend', makeLi(Math.max(1, page - 1), 'Prev', page === 1));
+  // pages (show up to 5 pages)
+  const startPage = Math.max(1, page - 2);
+  const endPage = Math.min(totalPages, startPage + 4);
+  for (let p = startPage; p <= endPage; p++) {
+    ul.insertAdjacentHTML('beforeend', `<li class="page-item ${p === page ? 'active' : ''}"><a class="page-link" href="#" data-page="${p}" onclick="${onClickName}(${p});return false;">${p}</a></li>`);
+  }
+  // Next
+  ul.insertAdjacentHTML('beforeend', makeLi(Math.min(totalPages, page + 1), 'Next', page === totalPages));
+}
+
+/* ---------- What work today functions ---------- */
+let whatworkPage = 1;
+function renderWhatworkTable(page = 1) {
+  whatworkPage = page;
+  const tbody = document.getElementById('whatworkTableBody');
+  if (!tbody) return;
+  const sorted = [...WHATWORK].sort((a,b) => new Date(b.date) - new Date(a.date));
+  const { slice, total, totalPages } = paginate(sorted, page);
+  tbody.innerHTML = slice.map((w, idx) => `
+    <tr>
+      <td>${(page-1)* (typeof ITEMS_PER_PAGE !== 'undefined' ? ITEMS_PER_PAGE : 10) + idx + 1}.</td>
+      <td>${formatDate ? formatDate(w.date) : w.date}</td>
+      <td>${w.note}</td>
+      <td>
+        <div class="d-flex gap-2">
+          <button class="btn btn-sm btn-outline-primary" onclick="editWhatwork('${w.id}')"><i class="fas fa-edit"></i></button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+  document.getElementById('whatworkCount').textContent = `${total} items`;
+  document.getElementById('whatworkFooter').textContent = `Showing ${(total===0?0:( (page-1)*(typeof ITEMS_PER_PAGE !== 'undefined' ? ITEMS_PER_PAGE : 10) + 1 ))} - ${Math.min(total, page*(typeof ITEMS_PER_PAGE !== 'undefined' ? ITEMS_PER_PAGE : 10))} of ${total}`;
+  buildPagination('whatworkPagination', page, totalPages, 'gotoWhatworkPage');
+}
+window.gotoWhatworkPage = (p) => renderWhatworkTable(p);
+
+document.addEventListener('DOMContentLoaded', function(){
+  const wf = document.getElementById('whatworkForm');
+  if (wf) {
+    wf.addEventListener('submit', function(e){
+      e.preventDefault();
+      const id = document.getElementById('whatworkId').value || Date.now().toString();
+      const date = document.getElementById('whatworkDate').value;
+      const note = document.getElementById('whatworkNote').value.trim();
+      if (!date || !note) { alert('Please provide date and note'); return; }
+      const exists = WHATWORK.findIndex(w => w.id === id);
+      const record = { id, date, note };
+      if (exists >= 0) WHATWORK[exists] = record; else WHATWORK.push(record);
+      saveWhatwork();
+      renderWhatworkTable(1);
+      wf.reset();
+      document.getElementById('whatworkId').value = '';
+      const delbtn = document.getElementById('btnDeleteWhatwork'); if (delbtn) delbtn.style.display = 'none';
+    });
+  }
+  const delW = document.getElementById('btnDeleteWhatwork');
+  if (delW) delW.addEventListener('click', function(){
+    const id = document.getElementById('whatworkId').value;
+    if (!id) return;
+    if (!confirm('Delete this entry?')) return;
+    WHATWORK = WHATWORK.filter(w => w.id !== id);
+    saveWhatwork();
+    renderWhatworkTable(1);
+    document.getElementById('whatworkForm').reset();
+    document.getElementById('whatworkId').value = '';
+    delW.style.display = 'none';
+  });
+  const clearW = document.getElementById('btnClearWhatwork');
+  if (clearW) clearW.addEventListener('click', function(){ document.getElementById('whatworkForm').reset(); document.getElementById('whatworkId').value = ''; if (document.getElementById('btnDeleteWhatwork')) document.getElementById('btnDeleteWhatwork').style.display = 'none'; });
+});
+
+/* ---------- Transactions functions ---------- */
+let transactionsPage = 1;
+function renderTransactionsTable(page = 1) {
+  transactionsPage = page;
+  const tbody = document.getElementById('transactionsTableBody');
+  if (!tbody) return;
+  const sorted = [...TRANSACTIONS].sort((a,b) => new Date(b.date) - new Date(a.date));
+  const { slice, total, totalPages } = paginate(sorted, page);
+  tbody.innerHTML = slice.map((t, idx) => `
+    <tr>
+      <td>${(page-1)*(typeof ITEMS_PER_PAGE !== 'undefined' ? ITEMS_PER_PAGE : 10) + idx + 1}.</td>
+      <td>${formatDate ? formatDate(t.date) : t.date}</td>
+      <td>${(t.deposit?parseFloat(t.deposit).toFixed(2):'0.00')}</td>
+      <td>${t.expenseItem || '-'}</td>
+      <td>${t.description || '-'}</td>
+      <td>
+        <div class="d-flex gap-2">
+          <button class="btn btn-sm btn-outline-primary" onclick="editTransaction('${t.id}')"><i class="fas fa-edit"></i></button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+  document.getElementById('transactionsCount').textContent = `${total} items`;
+  document.getElementById('transactionsFooter').textContent = `Showing ${(total===0?0:((page-1)*(typeof ITEMS_PER_PAGE !== 'undefined' ? ITEMS_PER_PAGE : 10) + 1))} - ${Math.min(total, page*(typeof ITEMS_PER_PAGE !== 'undefined' ? ITEMS_PER_PAGE : 10))} of ${total}`;
+  buildPagination('transactionsPagination', page, totalPages, 'gotoTransactionsPage');
+  calculateTotalsForDate(new Date().toISOString().slice(0,10)); // today
+}
+window.gotoTransactionsPage = (p) => renderTransactionsTable(p);
+
+document.addEventListener('DOMContentLoaded', function(){
+  const tf = document.getElementById('transactionForm');
+  if (tf) {
+    tf.addEventListener('submit', function(e){
+      e.preventDefault();
+      const id = document.getElementById('transactionId').value || Date.now().toString();
+      const date = document.getElementById('transactionDate').value;
+      const deposit = document.getElementById('transactionDeposit').value || 0;
+      const expenseItem = document.getElementById('transactionExpenseItem').value.trim();
+      const description = document.getElementById('transactionDescription').value.trim();
+      if (!date) { alert('Please provide a date'); return; }
+      const exists = TRANSACTIONS.findIndex(t => t.id === id);
+      const record = { id, date, deposit: parseFloat(deposit) || 0, expenseItem, description };
+      if (exists >= 0) TRANSACTIONS[exists] = record; else TRANSACTIONS.push(record);
+      saveTransactions();
+      renderTransactionsTable(1);
+      tf.reset();
+      document.getElementById('transactionId').value = '';
+      const delbtn = document.getElementById('btnDeleteTransaction'); if (delbtn) delbtn.style.display = 'none';
+    });
+  }
+  const delT = document.getElementById('btnDeleteTransaction');
+  if (delT) delT.addEventListener('click', function(){
+    const id = document.getElementById('transactionId').value;
+    if (!id) return;
+    if (!confirm('Delete this transaction?')) return;
+    TRANSACTIONS = TRANSACTIONS.filter(t => t.id !== id);
+    saveTransactions();
+    renderTransactionsTable(1);
+    document.getElementById('transactionForm').reset();
+    document.getElementById('transactionId').value = '';
+    delT.style.display = 'none';
+  });
+  const clearT = document.getElementById('btnClearTransaction');
+  if (clearT) clearT.addEventListener('click', function(){ document.getElementById('transactionForm').reset(); document.getElementById('transactionId').value = ''; if (document.getElementById('btnDeleteTransaction')) document.getElementById('btnDeleteTransaction').style.display = 'none'; });
+});
+
+/* ---------- Totals calculation ---------- */
+function calculateTotalsForDate(dateISO) {
+  // dateISO in 'YYYY-MM-DD' format
+  const totalDeposit = TRANSACTIONS.filter(t => t.date === dateISO).reduce((s, r) => s + (parseFloat(r.deposit)||0), 0);
+  const totalExpenses = TRANSACTIONS.filter(t => t.date === dateISO && (!t.deposit || (parseFloat(t.deposit)||0) === 0)).length;
+  const td = document.getElementById('totalDepositToday');
+  const te = document.getElementById('totalExpensesToday');
+  if (td) td.textContent = totalDeposit.toFixed(2);
+  if (te) te.textContent = totalExpenses.toFixed(0);
+}
+
+/* initial renders */
+setTimeout(function(){ try{ renderWhatworkTable(1); renderTransactionsTable(1); }catch(e){} }, 300);
+</script>
+<!-- Add Case Type Modal -->
+<div aria-hidden="true" aria-labelledby="caseTypeModalLabel" class="modal fade" id="caseTypeModal" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="caseTypeModalLabel">Add Case Type</h5>
+<button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+</div>
+<div class="modal-body">
+<form id="caseTypeForm">
+<div class="mb-3">
+<label class="form-label">Case Type Name</label>
+<input class="form-control" id="caseTypeName" required="" type="text">
+</input></div>
+<div class="text-end">
+<button class="btn btn-primary" id="btnSaveCaseType" type="submit">Save</button>
+<button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
+</div>
+</form>
+</div>
+</div>
+</div>
+</div>
+<!-- Add Court Modal -->
+<div aria-hidden="true" aria-labelledby="courtModalLabel" class="modal fade" id="courtModal" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="courtModalLabel">Add Court / Authority</h5>
+<button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+</div>
+<div class="modal-body">
+<form id="courtForm">
+<div class="mb-3">
+<label class="form-label">Court Name</label>
+<input class="form-control" id="courtName" required="" type="text">
+</input></div>
+<div class="text-end">
+<button class="btn btn-primary" id="btnSaveCourt" type="submit">Save</button>
+<button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
+</div>
+</form>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+(function(){
+  const form = document.getElementById("whatworkForm");
+  if(!form) return;
+  const tableBody = document.getElementById("whatworkTableBody");
+  const countEl = document.getElementById("whatworkCount");
+  const footerEl = document.getElementById("whatworkFooter");
+  const btnClear = document.getElementById("btnClearWhatwork");
+  const storageKey = "cm_whatwork_today";
+
+  function loadWhatwork() {
+    const data = JSON.parse(localStorage.getItem(storageKey) || "[]");
+    if(!tableBody) return;
+    tableBody.innerHTML = "";
+    if (data.length === 0) {
+      tableBody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">No work added yet</td></tr>`;
+    } else {
+      data.forEach((item, i) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${i + 1}</td>
+          <td>${item.date}</td>
+          <td>${item.note}</td>
+          <td>
+            <button class="btn btn-sm btn-warning me-1" data-id="${item.id}" data-type="edit">Edit</button>
+            <button class="btn btn-sm btn-danger" data-id="${item.id}" data-type="delete">Delete</button>
+          </td>`;
+        tableBody.appendChild(tr);
+      });
+    }
+    if(countEl) countEl.textContent = `${data.length} items`;
+    if(footerEl) footerEl.textContent = `Showing ${data.length}`;
+  }
+
+  function saveWhatwork(e) {
+    e.preventDefault();
+    const date = document.getElementById("whatworkDate").value;
+    const note = document.getElementById("whatworkNote").value.trim();
+    if (!date || !note) { alert("Please fill out all fields."); return; }
+    const data = JSON.parse(localStorage.getItem(storageKey) || "[]");
+    data.push({ id: Date.now(), date, note });
+    localStorage.setItem(storageKey, JSON.stringify(data));
+    loadWhatwork();
+    form.reset();
+    // navigate back to dashboard (simulate click)
+    const dash = document.querySelector('.nav-link[data-target="dashboard"]');
+    if(dash) dash.click();
+  }
+
+  // Remove any previous handler to avoid duplicates
+  form.removeEventListener && form.removeEventListener('submit', saveWhatwork);
+  form.addEventListener('submit', saveWhatwork);
+  if(btnClear) btnClear.addEventListener('click', ()=> form.reset());
+  // initial load
+  setTimeout(loadWhatwork, 60);
+})();
+</script>
+</body>
+</html>
